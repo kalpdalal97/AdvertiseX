@@ -69,6 +69,19 @@ Replace them with the details from the shop's Google Business listing before the
 site goes live. The header, footer and Visit page all read from this object, so
 one edit updates every page.
 
+## Single-file build
+
+`tools/build_artifact.py` folds all three pages into one self-contained HTML file
+at `dist/deep-sons.html` — hash routing instead of separate pages, and the
+stylesheet, scripts and all 58 artworks carried inline. Handy for sharing a
+preview link or e-mailing the site to someone before it has a domain.
+
+```sh
+python3 tools/build_artifact.py
+```
+
+The multi-page site is the source of truth; rebuild after any change.
+
 ## Running it
 
 It is plain HTML, CSS and JavaScript — no build step, no dependencies, no
