@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visit Us — Deep Sons</title>
+<meta name="description" content="Where to find Deep Sons, opening hours, and what to expect when you come in for suiting, shirting or wedding wear.">
+<meta name="theme-color" content="#fbf6ec">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="head" data-header></header>
+
+<section class="panel" style="padding-bottom:24px">
+  <div class="wrap">
+    <div class="panel__head">
+      <p class="kicker">Visit us</p>
+      <h2>The shop</h2>
+      <p>Come in, sit down, and let us put the cloth in your hands. That part does
+         not work on a screen.</p>
+    </div>
+    <div class="info">
+      <div class="info__box">
+        <h3>Find us</h3>
+        <dl data-address></dl>
+        <a class="btn btn--ink" data-maps style="margin-top:16px" target="_blank" rel="noopener">Open in Maps</a>
+      </div>
+      <div class="info__box">
+        <h3>Hours</h3>
+        <dl data-hours></dl>
+      </div>
+      <div class="info__box">
+        <h3>Before you come</h3>
+        <ul>
+          <li>Wedding wear: allow three to four weeks and two fittings.</li>
+          <li>Suiting: allow two weeks; a basted trial is included.</li>
+          <li>Shirting: bring a shirt that fits you well if you have one.</li>
+          <li>Bringing your own cloth is welcome.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band__art">
+    <img src="assets/img/tailoring-measure-and-fit.svg" alt="Measuring tape, thread and shears on the counter">
+  </div>
+  <div class="band__txt">
+    <p class="kicker">What happens in store</p>
+    <h2>From the shelf to the mirror</h2>
+    <ul class="ticks">
+      <li>We pull the lengths you shortlisted and a few you did not expect</li>
+      <li>Measurements are taken by hand and kept on file for next time</li>
+      <li>You choose collar, cuff, length, lining and buttons</li>
+      <li>We agree a date, and you come back for the trial</li>
+    </ul>
+    <p>Prices depend entirely on the cloth and the work, so we talk about them at
+       the counter rather than publishing them here.</p>
+    <a class="btn btn--ink" href="collection.html?c=all">Back to the look book</a>
+  </div>
+</section>
+
+<section class="panel panel--tint">
+  <div class="wrap">
+    <p class="note"><b>A note on these photographs.</b> Every image on this site was
+      drawn for Deep Sons as original artwork — there is no stock photography here,
+      and nothing is borrowed from another shop or brand. Colours are indicative;
+      the cloth is the truth.</p>
+  </div>
+</section>
+
+<footer class="foot" data-footer></footer>
+
+<script src="assets/js/catalogue.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var C = window.DS_CONFIG;
+  var a = document.querySelector('[data-address]');
+  if (a) {
+    var rows = '<dt>Address</dt><dd>' + C.address.join('<br>') + '</dd>';
+    if (C.phone) rows += '<dt>Phone</dt><dd><a href="tel:' + C.phone.replace(/\s/g, '') + '">' + C.phone + '</a></dd>';
+    if (C.whatsapp) rows += '<dt>WhatsApp</dt><dd><a href="https://wa.me/' + C.whatsapp + '">Message us</a></dd>';
+    if (C.email) rows += '<dt>Email</dt><dd><a href="mailto:' + C.email + '">' + C.email + '</a></dd>';
+    a.innerHTML = rows;
+  }
+  var h = document.querySelector('[data-hours]');
+  if (h) h.innerHTML = C.hours.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('');
+  var m = document.querySelector('[data-maps]');
+  if (m) m.href = C.mapsUrl;
+})();
+</script>
+</body>
+</html>
