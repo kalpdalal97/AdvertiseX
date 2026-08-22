@@ -17,6 +17,35 @@ ROOT = os.path.normpath(os.path.join(HERE, '..'))
 DIST = os.path.join(ROOT, 'dist')
 
 
+def datauri(relpath):
+    """Inline one asset. SVG goes in as percent-encoded text (smaller and
+    diff-able); raster formats go in as base64."""
+    import base64
+    from urllib.parse import quote
+    full = os.path.join(ROOT, relpath)
+    ext = os.path.splitext(relpath)[1].lower()
+    if ext == '.svg':
+        with open(full, encoding='utf-8') as f:
+            return 'data:image/svg+xml,' + quote(f.read(), safe="!'()*-._~")
+    mime = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+            '.webp': 'image/webp'}[ext]
+    with open(full, 'rb') as f:
+        return 'data:%s;base64,%s' % (mime, base64.b64encode(f.read()).decode())
+
+
+def inline_assets(text):
+    """Swap every assets/img/... reference in the document for a data URI."""
+    seen = {}
+
+    def sub(m):
+        rel = m.group(0)
+        if rel not in seen:
+            seen[rel] = datauri(rel)
+        return seen[rel]
+
+    return re.sub(r'assets/img/[A-Za-z0-9._/-]+\.(?:svg|png|jpe?g|webp)', sub, text)
+
+
 def read(*parts):
     with open(os.path.join(ROOT, *parts), encoding='utf-8') as f:
         return f.read()
@@ -62,7 +91,8 @@ def patch_app(js):
         "  function art(id) {\n"
         "    if (!ART_CACHE[id]) {\n"
         "      var raw = (window.DS_ART || {})[id];\n"
-        "      ART_CACHE[id] = raw ? 'data:image/svg+xml,' + encodeURIComponent(raw) : '';\n"
+        "      ART_CACHE[id] = !raw ? '' : (raw.slice(0, 5) === 'data:' ? raw\n"
+        "        : 'data:image/svg+xml,' + encodeURIComponent(raw));\n"
         "    }\n"
         "    return ART_CACHE[id];\n"
         "  }\n\n"
@@ -171,13 +201,9 @@ def main():
 
     art = {}
     for item in data['items']:
-        name = os.path.basename(item['img'])
-        art[item['id']] = read('assets', 'img', name)
+        rel = item['img']
+        art[item['id']] = read(*rel.split('/')) if rel.endswith('.svg') else datauri(rel)
         del item['img']
-
-    hero = read('assets', 'img', 'hero.svg')
-    logo = read('assets', 'img', 'logo.svg')
-    favicon = read('assets', 'img', 'favicon.svg')
 
     app = patch_app(read('assets', 'js', 'app.js'))
     visit_js = read('visit.html').split('<script>', 2)[-1].split('</script>')[0]
@@ -187,25 +213,8 @@ def main():
         ('coll', relink(body_of('collection.html'))),
         ('visit', relink(body_of('visit.html'))),
     ]
-
-    # the hero and the two band images are referenced straight from markup
-    inline = {
-        'assets/img/hero.svg': hero,
-        'assets/img/logo.svg': logo,
-        'assets/img/favicon.svg': favicon,
-        'assets/img/tailoring-the-cutting-table.svg': read('assets', 'img', 'tailoring-the-cutting-table.svg'),
-        'assets/img/tailoring-measure-and-fit.svg': read('assets', 'img', 'tailoring-measure-and-fit.svg'),
-    }
-
-    body = []
-    for name, markup in pages:
-        for path, svg in inline.items():
-            uri = 'data:image/svg+xml,' + quote(svg, safe="!'()*-._~").replace('%20', '%20')
-            markup = markup.replace('src="%s"' % path, 'src="%s"' % uri)
-        body.append('<div data-page="%s"%s>%s</div>' % (name, '' if name == 'home' else ' hidden', markup))
-
-    logo_uri = 'data:image/svg+xml,' + quote(logo, safe="!'()*-._~")
-    app = app.replace('src="assets/img/logo.svg"', 'src="%s"' % logo_uri)
+    body = ['<div data-page="%s"%s>%s</div>' % (n, '' if n == 'home' else ' hidden', m)
+            for n, m in pages]
 
     out = []
     out.append('<title>Deep Sons</title>')
@@ -222,7 +231,9 @@ def main():
     out.append('<script>%s</script>' % visit_js)
     out.append('<script>%s</script>' % ROUTER)
 
-    html = '\n'.join(out)
+    html = inline_assets('\n'.join(out))
+    left = re.findall(r'assets/img/[A-Za-z0-9._/-]+', html)
+    assert not left, 'un-inlined asset reference: %s' % set(left)
     path = os.path.join(DIST, 'deep-sons.html')
     with open(path, 'w', encoding='utf-8') as f:
         f.write(html)
