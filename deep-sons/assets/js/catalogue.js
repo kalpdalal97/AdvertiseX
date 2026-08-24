@@ -46,81 +46,6 @@ window.DS = {
   ],
   "items": [
     {
-      "id": "photo-ivory-bandhgala",
-      "section": "jodhpuri",
-      "title": "Ivory Bandhgala with Zari Buta",
-      "img": "assets/img/photo/white-jodhpuri-card.jpg",
-      "fabric": "Matte ivory blend",
-      "weave": "Hand-embroidered collar",
-      "detail": "Closed mandarin collar worked in zari, a single buta at the chest pocket and a layered hem over matching trousers.",
-      "tags": [
-        "Wedding",
-        "Daytime"
-      ],
-      "photo": true,
-      "colours": [
-        "ivory",
-        "white",
-        "cream"
-      ]
-    },
-    {
-      "id": "photo-cream-indowestern",
-      "section": "indo-western",
-      "title": "Cream Paisley Indo-Western",
-      "img": "assets/img/photo/cream-indowestern-card.jpg",
-      "fabric": "Cream silk-blend",
-      "weave": "Resham and sequin paisley",
-      "detail": "Open-front jacket carrying a full sweep of paisley embellishment in silver and rose, over a plain mandarin kurta.",
-      "tags": [
-        "Wedding",
-        "Reception"
-      ],
-      "photo": true,
-      "colours": [
-        "cream",
-        "ivory",
-        "rose"
-      ]
-    },
-    {
-      "id": "photo-mustard-kurta",
-      "section": "kurta-jacket",
-      "title": "Mustard Pichwai Kurta",
-      "img": "assets/img/photo/mustard-kurta-card.jpg",
-      "fabric": "Mustard silk",
-      "weave": "Hand-embroidered hem panel",
-      "detail": "A deep embroidered hem of trees and figures, with matching zari cuffs and a soft open placket.",
-      "tags": [
-        "Festive",
-        "Haldi"
-      ],
-      "photo": true,
-      "colours": [
-        "mustard",
-        "gold"
-      ]
-    },
-    {
-      "id": "photo-blue-sherwani",
-      "section": "sherwani",
-      "title": "Powder Blue Floral Sherwani",
-      "img": "assets/img/photo/blue-sherwani-card.jpg",
-      "fabric": "Powder blue silk-blend",
-      "weave": "Tonal floral threadwork",
-      "detail": "Threadwork that gathers towards the hem and cuffs, finished with an embroidered collar band and mother-of-pearl buttons.",
-      "tags": [
-        "Wedding",
-        "Reception"
-      ],
-      "photo": true,
-      "colours": [
-        "powder",
-        "skyblue",
-        "ivory"
-      ]
-    },
-    {
       "id": "suiting-charcoal-herringbone-length",
       "section": "suiting",
       "title": "Charcoal Herringbone Length",
@@ -1048,23 +973,6 @@ window.DS = {
         "cream",
         "gold"
       ]
-    }
-  ],
-  "campaign": [
-    {
-      "img": "assets/img/photo/blue-sherwani-banner.jpg",
-      "title": "Ethnic Collection",
-      "line": "Premium fabrics, exquisite embroidery, timeless style."
-    },
-    {
-      "img": "assets/img/photo/cream-indowestern-banner.jpg",
-      "title": "Prestigious \u00b7 Regal \u00b7 Lavish",
-      "line": "Intricate embellishments that define grandeur."
-    },
-    {
-      "img": "assets/img/photo/mustard-kurta-banner.jpg",
-      "title": "Tradition. Elegance. You.",
-      "line": "Crafted to perfection, made for memories."
     }
   ],
   "colours": {

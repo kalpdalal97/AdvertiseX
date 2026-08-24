@@ -6,13 +6,12 @@
      Everything the shop may want to change lives here.                     */
   var CONFIG = window.DS_CONFIG = {
     name: 'Deep Sons',
-    tagline: 'Ethnic Wear, Suiting & Shirting',
-    since: 'Ethnic Wear',
-    proprietor: 'By Darshan Dalal',
-    // TODO: confirm the street address against the shop's Google listing.
+    tagline: 'Suiting, Shirting & Wedding Wear',
+    since: 'Tailors & Cloth Merchants',
+    // TODO: confirm these against the shop's Google Business listing.
     address: ['Deep Sons', 'Main Market Road', 'City — PIN'],
-    phone: '+91 98980 64134',
-    whatsapp: '919898064134',
+    phone: '',
+    whatsapp: '',
     email: '',
     mapsUrl: 'https://maps.app.goo.gl/EVc7AHxfjvW4ctP49?g_st=ic',
     hours: [
@@ -27,10 +26,10 @@
   var SECTION_COVER = {
     'suiting': 'suiting-charcoal-formal-suit',
     'shirting': 'shirting-powder-blue-fine-stripe',
-    'sherwani': 'photo-blue-sherwani',
-    'indo-western': 'photo-cream-indowestern',
-    'kurta-jacket': 'photo-mustard-kurta',
-    'jodhpuri': 'photo-ivory-bandhgala',
+    'sherwani': 'sherwani-ivory-zardozi-sherwani',
+    'indo-western': 'indo-western-emerald-cape-indo-western',
+    'kurta-jacket': 'kurta-jacket-emerald-sparkle-set',
+    'jodhpuri': 'jodhpuri-bottle-green-jodhpuri',
     'tailoring': 'tailoring-canvas-and-construction'
   };
 
@@ -128,7 +127,7 @@
       '<div class="head__in">' +
         '<button class="icon-btn head__burger" data-open-drawer aria-label="Open menu">' + svg('burger') + '</button>' +
         '<a class="brand" href="index.html">' +
-          '<img src="assets/img/logo-mark.png" alt="" width="30" height="37">' +
+          '<img src="assets/img/logo.svg" alt="" width="34" height="34">' +
           '<b>' + esc(CONFIG.name) + '</b><small>' + esc(CONFIG.since) + '</small>' +
         '</a>' +
         '<nav class="head__nav">' + links + '<a href="visit.html"' +
@@ -144,7 +143,7 @@
     var html =
       '<div class="scrim" data-close-drawer></div>' +
       '<aside class="drawer" id="drawer" aria-label="Main menu" aria-hidden="true">' +
-        '<div class="drawer__top"><span>Menu<u>' + esc(CONFIG.proprietor) + '</u></span>' +
+        '<div class="drawer__top"><span>Menu</span>' +
           '<button class="icon-btn" data-close-drawer aria-label="Close menu">' + svg('close') + '</button></div>' +
         '<div class="drawer__body">' +
           '<h4>Shop by product</h4>' +
@@ -194,7 +193,6 @@
     host.innerHTML =
       '<div class="wrap"><div class="foot__grid">' +
         '<div><div class="foot__brand">' + esc(CONFIG.name) + '</div>' +
-          '<p class="foot__by">' + esc(CONFIG.since) + ' &middot; ' + esc(CONFIG.proprietor) + '</p>' +
           '<p>' + esc(CONFIG.tagline) + '. Cloth chosen by hand, cut on our own table ' +
           'and finished to your measurements.</p>' +
           '<p><a href="' + esc(CONFIG.mapsUrl) + '" target="_blank" rel="noopener">' +
@@ -230,7 +228,6 @@
     return '<article class="card' + (isWide(item) ? ' is-wide' : '') + '" data-id="' + item.id + '">' +
       '<a class="card__shot" href="#" data-open="' + item.id + '">' +
         '<img src="' + item.img + '" alt="' + esc(item.title) + '" loading="lazy" width="800" height="1100">' +
-        (item.photo ? '<em class="shot-tag">In store</em>' : '') +
       '</a>' +
       '<button class="heart' + (isSaved(item.id) ? ' is-on' : '') + '" data-save="' + item.id + '" ' +
         'aria-pressed="' + isSaved(item.id) + '" aria-label="Save ' + esc(item.title) + '">' +
@@ -348,15 +345,6 @@
         'royal', 'navy', 'indigo', 'charcoal', 'grey', 'black'];
       rail.innerHTML = keys.map(function (k) {
         return swatchHtml(k, false, 'collection.html?c=all&colour=' + k);
-      }).join('');
-    }
-
-    var camp = document.querySelector('[data-campaign]');
-    if (camp && DS.campaign) {
-      camp.innerHTML = DS.campaign.map(function (c) {
-        return '<figure class="promo">' +
-          '<img src="' + c.img + '" alt="' + esc(c.title) + ' \u2014 ' + esc(c.line) + '" loading="lazy">' +
-          '</figure>';
       }).join('');
     }
 
