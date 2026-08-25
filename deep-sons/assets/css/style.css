@@ -218,32 +218,6 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
 .btn--ink { border-color: var(--ink); color: var(--ink); }
 .btn--ink:hover { background: var(--ink); color: var(--paper); }
 
-/* ----------------------------------------------------------- colour rail -- */
-
-.rail {
-  border-bottom: 1px solid var(--line);
-  background: var(--paper-2) url("../img/tile.svg") repeat;
-  background-size: 60px 60px;
-}
-.rail__scroll {
-  display: flex; gap: 18px; overflow-x: auto; padding: 16px 18px;
-  scrollbar-width: none; max-width: var(--wrap); margin: 0 auto;
-}
-.rail__scroll::-webkit-scrollbar { display: none; }
-.swatch {
-  flex: none; width: 66px; text-align: center; font-size: 11px;
-  color: var(--ink-2); line-height: 1.25;
-}
-.swatch i {
-  display: block; width: 54px; height: 54px; margin: 0 auto 7px;
-  border-radius: 50%; border: 1px solid rgba(36,26,20,.14);
-  box-shadow: inset 0 -6px 12px rgba(0,0,0,.14), inset 0 6px 10px rgba(255,255,255,.32);
-}
-.swatch:hover i { transform: scale(1.06); }
-.swatch i { transition: transform .18s, box-shadow .18s; }
-.swatch.is-on i { box-shadow: 0 0 0 2px var(--paper-2), 0 0 0 4px var(--gold); }
-.swatch.is-on { color: var(--ink); font-weight: 600; }
-
 /* ---------------------------------------------------------------- panels -- */
 
 .panel { padding: 54px 0; }

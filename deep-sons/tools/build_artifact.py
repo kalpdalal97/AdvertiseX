@@ -17,6 +17,35 @@ ROOT = os.path.normpath(os.path.join(HERE, '..'))
 DIST = os.path.join(ROOT, 'dist')
 
 
+def datauri(relpath):
+    """Inline one asset: SVG as percent-encoded text, raster as base64."""
+    import base64
+    from urllib.parse import quote
+    full = os.path.join(ROOT, relpath)
+    ext = os.path.splitext(relpath)[1].lower()
+    if ext == '.svg':
+        with open(full, encoding='utf-8') as f:
+            return 'data:image/svg+xml,' + quote(f.read(), safe="!'()*-._~")
+    mime = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+            '.webp': 'image/webp'}[ext]
+    with open(full, 'rb') as f:
+        return 'data:%s;base64,%s' % (mime, base64.b64encode(f.read()).decode())
+
+
+def inline_assets(text):
+    """Swap every assets/img/... reference in the document for a data URI, so
+    adding an image to a page never needs a matching edit here."""
+    seen = {}
+
+    def sub(m):
+        rel = m.group(0)
+        if rel not in seen:
+            seen[rel] = datauri(rel)
+        return seen[rel]
+
+    return re.sub(r'assets/img/[A-Za-z0-9._/-]+\.(?:svg|png|jpe?g|webp)', sub, text)
+
+
 def read(*parts):
     with open(os.path.join(ROOT, *parts), encoding='utf-8') as f:
         return f.read()
@@ -32,7 +61,9 @@ def body_of(page):
 def relink(html):
     """Turn file-based navigation into hash routes."""
     html = html.replace('collection.html?c=', '#c=')
-    html = html.replace('href="visit.html"', 'href="#visit"')
+    html = html.replace('href="visit.html"', 'href="#about"')
+    html = html.replace('href="about.html"', 'href="#about"')
+    html = html.replace('href="men.html"', 'href="#men"')
     html = html.replace('href="index.html"', 'href="#"')
     return html
 
@@ -45,13 +76,25 @@ def patch_app(js):
     before = js
     js = js.replace("var here = (location.pathname.split('/').pop() || 'index.html');",
                     "var here = location.hash.replace(/^#/, '');")
-    js = js.replace("(here === 'visit.html' ? ' aria-current=\"page\"' : '')",
-                    "(here === 'visit' ? ' aria-current=\"page\"' : '')")
     assert js != before, 'header current-page patch did not apply'
+
+    # the nav addresses hash routes, and marks the current one by route name
+    nav = js[js.index('  var NAV = ['):js.index('  var SORTS = [')]
+    js = js.replace(nav, """  var NAV = [
+    { label: 'Home', href: '#', match: [''] },
+    { label: 'Men', href: '#men', match: ['men'] },
+    { label: 'Kids', href: '#c=kids', match: [] },
+    { label: 'Lookbook', href: '#c=all', match: [] },
+    { label: 'About Us', href: '#about', match: ['about'] }
+  ];
+
+""")
 
     # 2. every remaining file path becomes a hash route
     js = js.replace('collection.html?c=', '#c=')
-    js = js.replace('visit.html', '#visit')
+    js = js.replace('visit.html', '#about')
+    js = js.replace('about.html', '#about')
+    js = js.replace('men.html', '#men')
     js = js.replace('index.html', '#')
     assert 'collection.html' not in js and '.html' not in js, 'stray page link left in app.js' 
 
@@ -114,7 +157,11 @@ ROUTER = """
 /* ------------------------------------------------- single-page routing -- */
 (function () {
   'use strict';
-  var HOME_TITLE = 'Deep Sons \\u2014 Suiting, Shirting & Wedding Wear';
+  var TITLES = {
+    home: 'Deep Sons \\u2014 Suiting, Shirting & Wedding Wear',
+    men: 'Men \\u2014 Deep Sons',
+    about: 'About Us \\u2014 Deep Sons'
+  };
   var pages = {};
   [].forEach.call(document.querySelectorAll('[data-page]'), function (n) {
     pages[n.getAttribute('data-page')] = n;
@@ -136,14 +183,14 @@ ROUTER = """
   function route() {
     dismissOverlays();
     var h = location.hash.replace(/^#/, '');
-    var name = h === 'visit' ? 'visit' : (h.indexOf('c=') === 0 ? 'coll' : 'home');
+    var name = h.indexOf('c=') === 0 ? 'coll' : (pages[h] ? h : 'home');
     for (var k in pages) pages[k].hidden = k !== name;
     document.body.classList.toggle('has-bar', name === 'coll');
     if (name === 'coll') {
       var root = document.querySelector('[data-collection]');
       if (root && root.__applyHash) root.__applyHash();
     } else {
-      document.title = name === 'visit' ? 'Visit Us \\u2014 Deep Sons' : HOME_TITLE;
+      document.title = TITLES[name] || TITLES.home;
     }
     window.scrollTo(0, 0);
   }
@@ -161,68 +208,45 @@ def main():
     os.makedirs(DIST, exist_ok=True)
 
     css = read('assets', 'css', 'style.css')
-    tile = read('assets', 'img', 'tile.svg')
-    from urllib.parse import quote
-    tile_uri = 'data:image/svg+xml,' + quote(tile, safe="!'()*-._~ ").replace(' ', '%20')
-    css = css.replace('url("../img/tile.svg")', 'url("%s")' % tile_uri)
 
     cat = read('assets', 'js', 'catalogue.js')
     data = json.loads(cat.split('window.DS = ', 1)[1].rstrip().rstrip(';'))
 
     art = {}
     for item in data['items']:
-        name = os.path.basename(item['img'])
-        art[item['id']] = read('assets', 'img', name)
+        art[item['id']] = read(*item['img'].split('/'))
         del item['img']
 
-    hero = read('assets', 'img', 'hero.svg')
-    logo = read('assets', 'img', 'logo.svg')
-    favicon = read('assets', 'img', 'favicon.svg')
-
     app = patch_app(read('assets', 'js', 'app.js'))
-    visit_js = read('visit.html').split('<script>', 2)[-1].split('</script>')[0]
+    about_js = read('about.html').split('<script>', 2)[-1].split('</script>')[0]
 
     pages = [
         ('home', relink(body_of('index.html'))),
+        ('men', relink(body_of('men.html'))),
         ('coll', relink(body_of('collection.html'))),
-        ('visit', relink(body_of('visit.html'))),
+        ('about', relink(body_of('about.html'))),
     ]
-
-    # the hero and the two band images are referenced straight from markup
-    inline = {
-        'assets/img/hero.svg': hero,
-        'assets/img/logo.svg': logo,
-        'assets/img/favicon.svg': favicon,
-        'assets/img/tailoring-the-cutting-table.svg': read('assets', 'img', 'tailoring-the-cutting-table.svg'),
-        'assets/img/tailoring-measure-and-fit.svg': read('assets', 'img', 'tailoring-measure-and-fit.svg'),
-    }
-
-    body = []
-    for name, markup in pages:
-        for path, svg in inline.items():
-            uri = 'data:image/svg+xml,' + quote(svg, safe="!'()*-._~").replace('%20', '%20')
-            markup = markup.replace('src="%s"' % path, 'src="%s"' % uri)
-        body.append('<div data-page="%s"%s>%s</div>' % (name, '' if name == 'home' else ' hidden', markup))
-
-    logo_uri = 'data:image/svg+xml,' + quote(logo, safe="!'()*-._~")
-    app = app.replace('src="assets/img/logo.svg"', 'src="%s"' % logo_uri)
+    body = ['<div data-page="%s"%s>%s</div>' % (n, '' if n == 'home' else ' hidden', m)
+            for n, m in pages]
 
     out = []
     out.append('<title>Deep Sons</title>')
     out.append('<meta name="description" content="Look book for Deep Sons: suiting, '
                'shirting, wedding designer sherwani, indo-western, kurta jacket sets, '
                'jodhpuri and customized tailoring.">')
-    out.append('<style>\n%s\n</style>' % css)
+    out.append('<style>\n%s\n</style>' % css.replace('../img/', 'assets/img/'))
     out.append('<header class="head" data-header></header>')
     out.extend(body)
     out.append('<footer class="foot" data-footer></footer>')
     out.append('<script>window.DS = %s;</script>' % json.dumps(data, separators=(',', ':')))
     out.append('<script>window.DS_ART = %s;</script>' % json.dumps(art, separators=(',', ':')))
     out.append('<script>\n%s\n</script>' % app)
-    out.append('<script>%s</script>' % visit_js)
+    out.append('<script>%s</script>' % about_js)
     out.append('<script>%s</script>' % ROUTER)
 
-    html = '\n'.join(out)
+    html = inline_assets('\n'.join(out))
+    left = re.findall(r'assets/img/[A-Za-z0-9._/-]+', html)
+    assert not left, 'un-inlined asset reference: %s' % sorted(set(left))
     path = os.path.join(DIST, 'deep-sons.html')
     with open(path, 'w', encoding='utf-8') as f:
         f.write(html)

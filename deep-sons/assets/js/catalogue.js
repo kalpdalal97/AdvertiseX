@@ -2,46 +2,60 @@
 window.DS = {
   "sections": [
     {
+      "group": "men",
       "id": "suiting",
       "name": "Suiting",
       "kicker": "Cloth & Two-Piece",
       "blurb": "All-season wools, wool blends and travel-friendly weaves \u2014 seen as lengths on the counter and as finished two-piece suits."
     },
     {
+      "group": "men",
       "id": "shirting",
       "name": "Shirting",
       "kicker": "Cloth & Stitched",
       "blurb": "Poplins, dobbies, twills and soft checks, cut to your collar, cuff and shoulder rather than to a size label."
     },
     {
+      "group": "men",
       "id": "sherwani",
       "name": "Wedding Designer Sherwani",
       "kicker": "Occasion",
       "blurb": "Full-length ceremonial sherwanis with hand-guided threadwork, zari plackets and matched inner kurta and churidar."
     },
     {
+      "group": "men",
       "id": "indo-western",
       "name": "Indo-Western",
       "kicker": "Occasion",
       "blurb": "Draped and asymmetric silhouettes \u2014 cowls, capes and angled hems layered over a clean tunic base."
     },
     {
+      "group": "men",
       "id": "kurta-jacket",
       "name": "Kurta Jacket Set",
       "kicker": "Festive",
       "blurb": "Kurta, churidar and a Nehru jacket, worked as a set so the jacket motif and the kurta ground read together."
     },
     {
+      "group": "men",
       "id": "jodhpuri",
       "name": "Jodhpuri",
       "kicker": "Formal",
       "blurb": "The bandhgala \u2014 closed collar, clean chest, structured shoulder \u2014 in self-textures and ceremonial weaves."
     },
     {
+      "group": "men",
       "id": "tailoring",
       "name": "Customized Tailoring",
       "kicker": "Made to Measure",
       "blurb": "Everything above can be cut to your own measurements: your cloth or ours, your collar, your length, your finish."
+    },
+    {
+      "group": "kids",
+      "id": "kids",
+      "name": "Kids",
+      "kicker": "Little Occasion",
+      "blurb": "Sherwanis, kurta sets and bandhgalas cut small \u2014 the same cloth and the same finish as the grown-up rail, sized for the ring bearer."
     }
   ],
   "items": [
@@ -62,7 +76,8 @@ window.DS = {
         "charcoal",
         "grey",
         "black"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-midnight-navy-pinstripe",
@@ -80,7 +95,8 @@ window.DS = {
         "navy",
         "indigo",
         "charcoal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-slate-windowpane-length",
@@ -97,7 +113,8 @@ window.DS = {
       "colours": [
         "grey",
         "beige"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-ink-black-twill",
@@ -115,7 +132,8 @@ window.DS = {
       "colours": [
         "black",
         "charcoal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-bottle-green-glen-check-suit",
@@ -132,7 +150,8 @@ window.DS = {
       "colours": [
         "bottle",
         "olive"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-royal-blue-two-piece",
@@ -150,7 +169,8 @@ window.DS = {
         "royal",
         "navy",
         "powder"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-beige-summer-two-piece",
@@ -167,7 +187,8 @@ window.DS = {
       "colours": [
         "beige",
         "cream"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "suiting-charcoal-formal-suit",
@@ -185,7 +206,8 @@ window.DS = {
         "charcoal",
         "black",
         "grey"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-pure-white-poplin",
@@ -202,7 +224,8 @@ window.DS = {
       "colours": [
         "white",
         "ivory"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-sky-blue-dobby",
@@ -219,7 +242,8 @@ window.DS = {
       "colours": [
         "skyblue",
         "powder"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-powder-blue-fine-stripe",
@@ -236,7 +260,8 @@ window.DS = {
       "colours": [
         "powder",
         "skyblue"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-ivory-textured-weave",
@@ -253,7 +278,8 @@ window.DS = {
       "colours": [
         "ivory",
         "cream"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-lilac-micro-check",
@@ -270,7 +296,8 @@ window.DS = {
       "colours": [
         "lilac",
         "lavender"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-sage-cotton-check",
@@ -287,7 +314,8 @@ window.DS = {
       "colours": [
         "sage",
         "olive"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-charcoal-twill-shirt",
@@ -304,7 +332,8 @@ window.DS = {
       "colours": [
         "charcoal",
         "black"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "shirting-cream-linen-look-shirt",
@@ -321,7 +350,8 @@ window.DS = {
       "colours": [
         "cream",
         "beige"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-ivory-zardozi-sherwani",
@@ -339,7 +369,8 @@ window.DS = {
         "ivory",
         "cream",
         "gold"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-gold-brocade-sherwani",
@@ -356,7 +387,8 @@ window.DS = {
       "colours": [
         "gold",
         "mustard"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-maroon-jaal-sherwani",
@@ -373,7 +405,8 @@ window.DS = {
       "colours": [
         "maroon",
         "wine"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-bottle-green-threadwork",
@@ -390,7 +423,8 @@ window.DS = {
       "colours": [
         "bottle",
         "emerald"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-wine-paisley-sherwani",
@@ -407,7 +441,8 @@ window.DS = {
       "colours": [
         "wine",
         "maroon"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-cream-floral-sherwani",
@@ -425,7 +460,8 @@ window.DS = {
         "cream",
         "ivory",
         "peach"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-navy-zari-sherwani",
@@ -442,7 +478,8 @@ window.DS = {
       "colours": [
         "navy",
         "indigo"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "sherwani-rose-gold-buti-sherwani",
@@ -460,7 +497,8 @@ window.DS = {
         "peach",
         "rose",
         "gold"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-emerald-cape-indo-western",
@@ -478,7 +516,8 @@ window.DS = {
         "cream",
         "emerald",
         "bottle"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-ink-black-asymmetric",
@@ -495,7 +534,8 @@ window.DS = {
       "colours": [
         "black",
         "charcoal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-wine-drape-indo-western",
@@ -513,7 +553,8 @@ window.DS = {
         "ivory",
         "wine",
         "maroon"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-teal-layered-indo-western",
@@ -531,7 +572,8 @@ window.DS = {
         "cream",
         "teal",
         "powder"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-copper-cowl-indo-western",
@@ -549,7 +591,8 @@ window.DS = {
         "beige",
         "copper",
         "rust"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-indigo-angled-indo-western",
@@ -567,7 +610,8 @@ window.DS = {
         "ivory",
         "indigo",
         "navy"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-sage-overlay-indo-western",
@@ -585,7 +629,8 @@ window.DS = {
         "cream",
         "sage",
         "olive"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "indo-western-rust-panelled-indo-western",
@@ -603,7 +648,8 @@ window.DS = {
         "ivory",
         "rust",
         "copper"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-emerald-sparkle-set",
@@ -620,7 +666,8 @@ window.DS = {
       "colours": [
         "emerald",
         "gold"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-radiant-mustard-set",
@@ -638,7 +685,8 @@ window.DS = {
         "mustard",
         "gold",
         "rust"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-beige-patchwork-set",
@@ -655,7 +703,8 @@ window.DS = {
       "colours": [
         "beige",
         "cream"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-sage-jaal-set",
@@ -672,7 +721,8 @@ window.DS = {
       "colours": [
         "sage",
         "olive"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-ivory-motif-set",
@@ -689,7 +739,8 @@ window.DS = {
       "colours": [
         "ivory",
         "cream"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-navy-brocade-set",
@@ -706,7 +757,8 @@ window.DS = {
       "colours": [
         "navy",
         "indigo"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-maroon-paisley-set",
@@ -723,7 +775,8 @@ window.DS = {
       "colours": [
         "maroon",
         "wine"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "kurta-jacket-powder-bandhani-set",
@@ -741,7 +794,8 @@ window.DS = {
         "powder",
         "royal",
         "skyblue"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-black-bandhgala",
@@ -758,7 +812,8 @@ window.DS = {
       "colours": [
         "black",
         "charcoal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-ink-navy-bandhgala",
@@ -775,7 +830,8 @@ window.DS = {
       "colours": [
         "navy",
         "indigo"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-bottle-green-jodhpuri",
@@ -792,7 +848,8 @@ window.DS = {
       "colours": [
         "bottle",
         "emerald"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-wine-textured-jodhpuri",
@@ -809,7 +866,8 @@ window.DS = {
       "colours": [
         "wine",
         "maroon"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-charcoal-self-check-jodhpuri",
@@ -826,7 +884,8 @@ window.DS = {
       "colours": [
         "charcoal",
         "grey"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-ivory-ceremonial-jodhpuri",
@@ -843,7 +902,8 @@ window.DS = {
       "colours": [
         "ivory",
         "cream"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-maroon-zari-jodhpuri",
@@ -860,7 +920,8 @@ window.DS = {
       "colours": [
         "maroon",
         "wine"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "jodhpuri-teal-jaal-jodhpuri",
@@ -877,7 +938,153 @@ window.DS = {
       "colours": [
         "teal",
         "powder"
-      ]
+      ],
+      "kid": false
+    },
+    {
+      "id": "kids-ivory-kurta-jacket-set",
+      "section": "kids",
+      "title": "Ivory Kurta Jacket Set",
+      "img": "assets/img/kids-ivory-kurta-jacket-set.svg",
+      "fabric": "Cotton-silk kurta",
+      "weave": "Plain weave",
+      "detail": "Lattice-worked jacket over a plain ivory kurta.",
+      "tags": [
+        "Wedding",
+        "Festive"
+      ],
+      "colours": [
+        "ivory",
+        "gold"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-royal-blue-jodhpuri",
+      "section": "kids",
+      "title": "Royal Blue Jodhpuri",
+      "img": "assets/img/kids-royal-blue-jodhpuri.svg",
+      "fabric": "Soft wool blend",
+      "weave": "Plain weave",
+      "detail": "A proper bandhgala with a closed collar and five buttons.",
+      "tags": [
+        "Wedding",
+        "Formal"
+      ],
+      "colours": [
+        "royal",
+        "navy"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-maroon-brocade-sherwani",
+      "section": "kids",
+      "title": "Maroon Brocade Sherwani",
+      "img": "assets/img/kids-maroon-brocade-sherwani.svg",
+      "fabric": "Brocade weave",
+      "weave": "Brocade",
+      "detail": "Full-length sherwani with a zari placket and hem band.",
+      "tags": [
+        "Wedding",
+        "Groom"
+      ],
+      "colours": [
+        "maroon",
+        "wine"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-mustard-floral-kurta",
+      "section": "kids",
+      "title": "Mustard Floral Kurta",
+      "img": "assets/img/kids-mustard-floral-kurta.svg",
+      "fabric": "Printed cotton-silk",
+      "weave": "Floral vine",
+      "detail": "Light printed kurta and churidar for a daytime function.",
+      "tags": [
+        "Haldi",
+        "Daytime"
+      ],
+      "colours": [
+        "mustard",
+        "gold"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-bottle-green-jacket-set",
+      "section": "kids",
+      "title": "Bottle Green Jacket Set",
+      "img": "assets/img/kids-bottle-green-jacket-set.svg",
+      "fabric": "Silk-blend kurta",
+      "weave": "Plain weave",
+      "detail": "Buti-worked jacket over a deep green kurta.",
+      "tags": [
+        "Festive",
+        "Evening"
+      ],
+      "colours": [
+        "bottle",
+        "gold"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-peach-indo-western",
+      "section": "kids",
+      "title": "Peach Indo-Western",
+      "img": "assets/img/kids-peach-indo-western.svg",
+      "fabric": "Silk-blend drape",
+      "weave": "Plain weave",
+      "detail": "A small draped overlay with an angled hem.",
+      "tags": [
+        "Sangeet",
+        "Daytime"
+      ],
+      "colours": [
+        "cream",
+        "peach",
+        "rose"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-navy-bandhgala",
+      "section": "kids",
+      "title": "Navy Bandhgala",
+      "img": "assets/img/kids-navy-bandhgala.svg",
+      "fabric": "Twill wool blend",
+      "weave": "Twill weave",
+      "detail": "Self-twill bandhgala with matching trousers.",
+      "tags": [
+        "Formal",
+        "Reception"
+      ],
+      "colours": [
+        "navy",
+        "indigo"
+      ],
+      "kid": true
+    },
+    {
+      "id": "kids-cream-threadwork-sherwani",
+      "section": "kids",
+      "title": "Cream Threadwork Sherwani",
+      "img": "assets/img/kids-cream-threadwork-sherwani.svg",
+      "fabric": "Matte silk look",
+      "weave": "Threadwork scroll",
+      "detail": "Tonal threadwork, cut short and easy to move in.",
+      "tags": [
+        "Wedding",
+        "Daytime"
+      ],
+      "colours": [
+        "cream",
+        "ivory"
+      ],
+      "kid": true
     },
     {
       "id": "tailoring-measure-and-fit",
@@ -892,7 +1099,8 @@ window.DS = {
       ],
       "colours": [
         "beige"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "tailoring-the-cutting-table",
@@ -907,7 +1115,8 @@ window.DS = {
       ],
       "colours": [
         "teal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "tailoring-canvas-and-construction",
@@ -923,7 +1132,8 @@ window.DS = {
       ],
       "colours": [
         "charcoal"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "tailoring-bespoke-suit-trial",
@@ -939,7 +1149,8 @@ window.DS = {
       ],
       "colours": [
         "navy"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "tailoring-hand-finished-details",
@@ -954,7 +1165,8 @@ window.DS = {
       ],
       "colours": [
         "maroon"
-      ]
+      ],
+      "kid": false
     },
     {
       "id": "tailoring-made-to-measure-sherwani",
@@ -972,7 +1184,8 @@ window.DS = {
         "ivory",
         "cream",
         "gold"
-      ]
+      ],
+      "kid": false
     }
   ],
   "colours": {

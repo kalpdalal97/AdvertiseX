@@ -30,14 +30,22 @@
     'indo-western': 'indo-western-emerald-cape-indo-western',
     'kurta-jacket': 'kurta-jacket-emerald-sparkle-set',
     'jodhpuri': 'jodhpuri-bottle-green-jodhpuri',
-    'tailoring': 'tailoring-canvas-and-construction'
+    'tailoring': 'tailoring-canvas-and-construction',
+    'kids': 'kids-ivory-kurta-jacket-set'
   };
+
+  var NAV = [
+    { label: 'Home', href: 'index.html', match: ['index.html', ''] },
+    { label: 'Men', href: 'men.html', match: ['men.html'] },
+    { label: 'Kids', href: 'collection.html?c=kids', match: [] },
+    { label: 'Lookbook', href: 'collection.html?c=all', match: [] },
+    { label: 'About Us', href: 'about.html', match: ['about.html'] }
+  ];
 
   var SORTS = [
     ['picked', 'Hand-picked'],
     ['az', 'Name: A to Z'],
     ['za', 'Name: Z to A'],
-    ['colour', 'Grouped by colour'],
     ['fabric', 'Grouped by fabric']
   ];
 
@@ -120,8 +128,9 @@
     var host = document.querySelector('[data-header]');
     if (!host) return;
     var here = (location.pathname.split('/').pop() || 'index.html');
-    var links = SECTIONS.slice(0, 6).map(function (s) {
-      return '<a href="collection.html?c=' + s.id + '">' + esc(s.name.replace('Wedding Designer ', '')) + '</a>';
+    var links = NAV.map(function (n) {
+      var cur = n.match.indexOf(here) > -1 ? ' aria-current="page"' : '';
+      return '<a href="' + n.href + '"' + cur + '>' + esc(n.label) + '</a>';
     }).join('');
     host.innerHTML =
       '<div class="head__in">' +
@@ -130,8 +139,7 @@
           '<img src="assets/img/logo.svg" alt="" width="34" height="34">' +
           '<b>' + esc(CONFIG.name) + '</b><small>' + esc(CONFIG.since) + '</small>' +
         '</a>' +
-        '<nav class="head__nav">' + links + '<a href="visit.html"' +
-          (here === 'visit.html' ? ' aria-current="page"' : '') + '>Visit</a></nav>' +
+        '<nav class="head__nav">' + links + '</nav>' +
         '<a class="icon-btn" href="collection.html?c=saved" aria-label="Saved looks">' +
           svg('heart') + '<b class="head__count" data-saved-count hidden>0</b></a>' +
       '</div>';
@@ -146,17 +154,23 @@
         '<div class="drawer__top"><span>Menu</span>' +
           '<button class="icon-btn" data-close-drawer aria-label="Close menu">' + svg('close') + '</button></div>' +
         '<div class="drawer__body">' +
-          '<h4>Shop by product</h4>' +
-          SECTIONS.map(function (s) {
+          '<a class="is-lead" href="index.html">Home</a>' +
+          '<h4>Men</h4>' +
+          SECTIONS.filter(function (s) { return s.group === 'men'; }).map(function (s) {
             return '<a class="is-lead" href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a>';
           }).join('') +
-          '<a href="collection.html?c=all">View all</a>' +
+          '<h4>Kids</h4>' +
+          SECTIONS.filter(function (s) { return s.group === 'kids'; }).map(function (s) {
+            return '<a class="is-lead" href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a>';
+          }).join('') +
+          '<h4>Lookbook</h4>' +
+          '<a href="collection.html?c=all">Everything we make</a>' +
           '<h4>Shop by occasion</h4>' +
           occasions.map(function (t) {
             return '<a href="collection.html?c=all&amp;tag=' + encodeURIComponent(t) + '">' + esc(t) + '</a>';
           }).join('') +
           '<h4>The shop</h4>' +
-          '<a href="visit.html">Visit us</a>' +
+          '<a href="about.html">About us</a>' +
           '<a href="collection.html?c=tailoring">Customized tailoring</a>' +
           '<a href="collection.html?c=saved">Saved looks</a>' +
           '<div class="drawer__note">This is a look-book, not a shop. Nothing here is ' +
@@ -200,7 +214,9 @@
         '<div><h5>Look book</h5><ul>' +
           SECTIONS.map(function (s) {
             return '<li><a href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a></li>';
-          }).join('') + '</ul></div>' +
+          }).join('') +
+          '<li><a href="collection.html?c=all">Everything we make</a></li>' +
+          '<li><a href="about.html">About us</a></li></ul></div>' +
         '<div><h5>The shop</h5><p>' + addr + '</p><ul>' + contact.join('') + '</ul>' +
           '<p style="margin-top:14px">' + CONFIG.hours.map(function (h) {
             return esc(h[0]) + '<br><span style="color:#94836c">' + esc(h[1]) + '</span>';
@@ -237,14 +253,6 @@
         '<p class="card__meta">' + esc(item.fabric) + (item.weave ? ' &middot; ' + esc(item.weave) : '') + '</p>' +
         dotsHtml(item) +
       '</div></article>';
-  }
-
-  function swatchHtml(key, active, href) {
-    var c = COLOURS[key];
-    if (!c) return '';
-    var bg = 'background:linear-gradient(145deg,' + c.light + ',' + c.base + ' 55%,' + c.dark + ')';
-    return '<a class="swatch' + (active ? ' is-on' : '') + '" href="' + href + '">' +
-      '<i style="' + bg + '"></i>' + esc(c.label) + '</a>';
   }
 
   /* ------------------------------------------------------------- lightbox -- */
@@ -327,26 +335,19 @@
   /* ------------------------------------------------------------ home page -- */
 
   function initHome() {
-    var host = document.querySelector('[data-sections]');
-    if (host) {
-      host.innerHTML = SECTIONS.map(function (s) {
+    // a single page may carry more than one grid (the one-file build stacks
+    // every page in the same document), so render all of them
+    [].forEach.call(document.querySelectorAll('[data-sections]'), function (host) {
+      var group = host.getAttribute('data-sections');
+      var list = group ? SECTIONS.filter(function (s) { return s.group === group; }) : SECTIONS;
+      host.innerHTML = list.map(function (s) {
         var cover = itemById(SECTION_COVER[s.id]) || ITEMS.filter(function (i) { return i.section === s.id; })[0];
         return '<a class="sect" href="collection.html?c=' + s.id + '">' +
           '<img src="' + cover.img + '" alt="' + esc(s.name) + '" loading="lazy">' +
           '<div class="sect__cap"><em>' + esc(s.kicker) + '</em><b>' + esc(s.name) + '</b>' +
           '<p>' + esc(s.blurb) + '</p></div></a>';
       }).join('');
-    }
-
-    var rail = document.querySelector('[data-rail]');
-    if (rail) {
-      var keys = ['ivory', 'cream', 'beige', 'gold', 'mustard', 'rust', 'maroon', 'wine',
-        'rose', 'peach', 'sage', 'olive', 'emerald', 'bottle', 'teal', 'powder',
-        'royal', 'navy', 'indigo', 'charcoal', 'grey', 'black'];
-      rail.innerHTML = keys.map(function (k) {
-        return swatchHtml(k, false, 'collection.html?c=all&colour=' + k);
-      }).join('');
-    }
+    });
 
     var strip = document.querySelector('[data-strip]');
     if (strip) {
@@ -372,7 +373,6 @@
     var qs = new URLSearchParams(location.search);
     var state = {
       c: qs.get('c') || 'all',
-      colour: qs.get('colour') || '',
       tag: qs.get('tag') || '',
       sort: 'picked',
       view: 2
@@ -380,7 +380,6 @@
 
     var gridEl = root.querySelector('[data-grid]');
     var countEl = root.querySelector('[data-count]');
-    var railEl = root.querySelector('[data-rail]');
     var chipEl = root.querySelector('[data-chips]');
     var headEl = root.querySelector('[data-sect-head]');
 
@@ -395,11 +394,9 @@
 
     function visible() {
       var list = pool();
-      if (state.colour) list = list.filter(function (i) { return i.colours.indexOf(state.colour) > -1; });
       if (state.tag) list = list.filter(function (i) { return i.tags.indexOf(state.tag) > -1; });
       if (state.sort === 'az') list.sort(function (a, b) { return a.title.localeCompare(b.title); });
       if (state.sort === 'za') list.sort(function (a, b) { return b.title.localeCompare(a.title); });
-      if (state.sort === 'colour') list.sort(function (a, b) { return a.colours[0].localeCompare(b.colours[0]); });
       if (state.sort === 'fabric') list.sort(function (a, b) { return a.fabric.localeCompare(b.fabric); });
       return list;
     }
@@ -422,26 +419,6 @@
         '<p>' + esc(blurb) + '</p>';
     }
 
-    function paintRail() {
-      var seen = [], list = pool();
-      list.forEach(function (i) {
-        i.colours.forEach(function (k) { if (seen.indexOf(k) < 0) seen.push(k); });
-      });
-      seen.sort();
-      if (seen.length < 2) { railEl.parentNode.hidden = true; return; }
-      railEl.parentNode.hidden = false;
-      railEl.innerHTML =
-        '<a class="swatch' + (state.colour ? '' : ' is-on') + '" href="#" data-colour="">' +
-          '<i style="background:linear-gradient(145deg,#fdf9f0,#e3d6bf 55%,#b9a888)"></i>All</a>' +
-        seen.map(function (k) {
-          var c = COLOURS[k];
-          if (!c) return '';
-          return '<a class="swatch' + (state.colour === k ? ' is-on' : '') + '" href="#" data-colour="' + k + '">' +
-            '<i style="background:linear-gradient(145deg,' + c.light + ',' + c.base + ' 55%,' + c.dark + ')"></i>' +
-            esc(c.label) + '</a>';
-        }).join('');
-    }
-
     function paintChips() {
       var tags = [];
       pool().forEach(function (i) {
@@ -462,7 +439,7 @@
         gridEl.innerHTML = '<div class="empty"><h3>Nothing here yet</h3><p>' +
           (state.c === 'saved'
             ? 'Tap the heart on any photo to keep it here.'
-            : 'Try another colour or occasion.') + '</p></div>';
+            : 'Try another occasion.') + '</p></div>';
       } else {
         gridEl.innerHTML = list.map(cardHtml).join('');
       }
@@ -475,7 +452,7 @@
       var lab = root.querySelector('[data-sort-label]');
       if (lab) lab.textContent = s ? s[1] : 'Hand-picked';
       var fl = root.querySelector('[data-filter-label]');
-      var n = (state.colour ? 1 : 0) + (state.tag ? 1 : 0);
+      var n = state.tag ? 1 : 0;
       if (fl) fl.textContent = n ? n + ' applied' : 'Apply filter';
       var dot = root.querySelector('[data-filter-dot]');
       if (dot) dot.hidden = n === 0;
@@ -487,22 +464,14 @@
     function sync() {
       var u = new URL(location.href);
       u.searchParams.set('c', state.c);
-      state.colour ? u.searchParams.set('colour', state.colour) : u.searchParams.delete('colour');
       state.tag ? u.searchParams.set('tag', state.tag) : u.searchParams.delete('tag');
       history.replaceState(null, '', u);
     }
 
-    function render() { paintHead(); paintRail(); paintChips(); paintGrid(); paintBar(); sync(); }
+    function render() { paintHead(); paintChips(); paintGrid(); paintBar(); sync(); }
     render();
 
     root.addEventListener('click', function (e) {
-      var sw = e.target.closest('[data-colour]');
-      if (sw) {
-        e.preventDefault();
-        state.colour = sw.getAttribute('data-colour');
-        render();
-        return;
-      }
       var chip = e.target.closest('[data-tag]');
       if (chip) { e.preventDefault(); state.tag = chip.getAttribute('data-tag'); render(); return; }
       var v = e.target.closest('[data-view]');
@@ -536,23 +505,12 @@
       } else {
         var tags = [];
         pool().forEach(function (i) { i.tags.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); }); });
-        var cols = [];
-        pool().forEach(function (i) { i.colours.forEach(function (k) { if (cols.indexOf(k) < 0) cols.push(k); }); });
-        tags.sort(); cols.sort();
+        tags.sort();
         body.innerHTML =
           '<h5>Occasion &amp; use</h5><div class="sheet__opts">' +
             '<button class="chip' + (state.tag ? '' : ' is-on') + '" data-tag="">All</button>' +
             tags.map(function (t) {
               return '<button class="chip' + (state.tag === t ? ' is-on' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
-            }).join('') + '</div>' +
-          '<h5>Colour</h5><div class="sheet__opts">' +
-            '<button class="chip' + (state.colour ? '' : ' is-on') + '" data-colour="">All</button>' +
-            cols.map(function (k) {
-              var c = COLOURS[k];
-              return c ? '<button class="chip' + (state.colour === k ? ' is-on' : '') + '" data-colour="' + k + '">' +
-                '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:' +
-                c.base + ';margin-right:7px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)"></span>' +
-                esc(c.label) + '</button>' : '';
             }).join('') + '</div>';
       }
       sheet.classList.add('is-on'); sheetScrim.classList.add('is-on');
@@ -566,13 +524,11 @@
 
     sheet.addEventListener('click', function (e) {
       if (e.target.closest('[data-sheet-close]')) { closeSheet(); return; }
-      if (e.target.closest('[data-sheet-clear]')) { state.colour = ''; state.tag = ''; render(); closeSheet(); return; }
+      if (e.target.closest('[data-sheet-clear]')) { state.tag = ''; render(); closeSheet(); return; }
       var s = e.target.closest('[data-sort]');
       if (s) { state.sort = s.getAttribute('data-sort'); render(); closeSheet(); return; }
       var t = e.target.closest('[data-tag]');
       if (t) { state.tag = t.getAttribute('data-tag'); render(); openSheet('filter'); return; }
-      var c = e.target.closest('[data-colour]');
-      if (c) { state.colour = c.getAttribute('data-colour'); render(); openSheet('filter'); return; }
     });
     sheetScrim.addEventListener('click', closeSheet);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });

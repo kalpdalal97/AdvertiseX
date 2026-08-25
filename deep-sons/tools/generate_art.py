@@ -681,6 +681,14 @@ def build(item):
     parts.append(defs(c, kind, second, PALETTE[item['bg']] if item.get('bg') else None, span))
     if g in ('bolt', 'tools'):
         parts.append(body)
+    elif item.get('kid'):
+        # shrink the body about the shoulder line and drop it so the feet still
+        # meet the floor, then set a proportionally larger head on top of it
+        parts.append(backdrop())
+        parts.append('<g transform="translate(400,455) scale(1.06) '
+                     'translate(-400,-296)">%s</g>' % head())
+        parts.append('<g transform="translate(400,455) scale(0.86,0.78) '
+                     'translate(-400,-300)">%s%s%s</g>' % (body, hd, shoes()))
     else:
         parts.append(backdrop())
         parts.append(head())
@@ -695,6 +703,7 @@ def build(item):
 
 SECTIONS = [
     {
+        'group': 'men',
         'id': 'suiting',
         'name': 'Suiting',
         'kicker': 'Cloth & Two-Piece',
@@ -702,6 +711,7 @@ SECTIONS = [
                  'lengths on the counter and as finished two-piece suits.',
     },
     {
+        'group': 'men',
         'id': 'shirting',
         'name': 'Shirting',
         'kicker': 'Cloth & Stitched',
@@ -709,6 +719,7 @@ SECTIONS = [
                  'and shoulder rather than to a size label.',
     },
     {
+        'group': 'men',
         'id': 'sherwani',
         'name': 'Wedding Designer Sherwani',
         'kicker': 'Occasion',
@@ -716,6 +727,7 @@ SECTIONS = [
                  'zari plackets and matched inner kurta and churidar.',
     },
     {
+        'group': 'men',
         'id': 'indo-western',
         'name': 'Indo-Western',
         'kicker': 'Occasion',
@@ -723,6 +735,7 @@ SECTIONS = [
                  'layered over a clean tunic base.',
     },
     {
+        'group': 'men',
         'id': 'kurta-jacket',
         'name': 'Kurta Jacket Set',
         'kicker': 'Festive',
@@ -730,6 +743,7 @@ SECTIONS = [
                  'motif and the kurta ground read together.',
     },
     {
+        'group': 'men',
         'id': 'jodhpuri',
         'name': 'Jodhpuri',
         'kicker': 'Formal',
@@ -737,17 +751,26 @@ SECTIONS = [
                  'in self-textures and ceremonial weaves.',
     },
     {
+        'group': 'men',
         'id': 'tailoring',
         'name': 'Customized Tailoring',
         'kicker': 'Made to Measure',
         'blurb': 'Everything above can be cut to your own measurements: your cloth or '
                  'ours, your collar, your length, your finish.',
     },
+    {
+        'group': 'kids',
+        'id': 'kids',
+        'name': 'Kids',
+        'kicker': 'Little Occasion',
+        'blurb': 'Sherwanis, kurta sets and bandhgalas cut small \u2014 the same cloth '
+                 'and the same finish as the grown-up rail, sized for the ring bearer.',
+    },
 ]
 
 
 def I(sec, title, garment, color, pattern, fabric, detail, tags,
-      color2=None, pattern2=None, bg=None, trouser=None, also=()):
+      color2=None, pattern2=None, bg=None, trouser=None, also=(), kid=False):
     d = {
         'id': '%s-%s' % (sec, title.lower().replace(' ', '-').replace('&', 'and')
                          .replace('--', '-')),
@@ -762,6 +785,8 @@ def I(sec, title, garment, color, pattern, fabric, detail, tags,
         d['bg'] = bg
     if trouser:
         d['trouser'] = trouser
+    if kid:
+        d['kid'] = True
     return d
 
 
@@ -932,6 +957,35 @@ ITEMS = [
       'Silk-blend base', 'Jaal lattice ground with a tonal button set.',
       ['Reception', 'Sangeet'], also=['teal', 'powder']),
 
+    # ---------------------------------------------------------------- kids --
+    I('kids', 'Ivory Kurta Jacket Set', 'kurta_jacket', 'ivory', 'plain',
+      'Cotton-silk kurta', 'Lattice-worked jacket over a plain ivory kurta.',
+      ['Wedding', 'Festive'], color2='gold', pattern2='lattice', kid=True,
+      also=['ivory', 'gold']),
+    I('kids', 'Royal Blue Jodhpuri', 'jodhpuri', 'royal', 'plain',
+      'Soft wool blend', 'A proper bandhgala with a closed collar and five buttons.',
+      ['Wedding', 'Formal'], kid=True, also=['royal', 'navy']),
+    I('kids', 'Maroon Brocade Sherwani', 'sherwani', 'maroon', 'brocade',
+      'Brocade weave', 'Full-length sherwani with a zari placket and hem band.',
+      ['Wedding', 'Groom'], kid=True, also=['maroon', 'wine']),
+    I('kids', 'Mustard Floral Kurta', 'kurta', 'mustard', 'floral',
+      'Printed cotton-silk', 'Light printed kurta and churidar for a daytime function.',
+      ['Haldi', 'Daytime'], kid=True, also=['mustard', 'gold']),
+    I('kids', 'Bottle Green Jacket Set', 'kurta_jacket', 'bottle', 'plain',
+      'Silk-blend kurta', 'Buti-worked jacket over a deep green kurta.',
+      ['Festive', 'Evening'], color2='gold', pattern2='buti', kid=True,
+      also=['bottle', 'gold']),
+    I('kids', 'Peach Indo-Western', 'indowestern', 'cream', 'plain',
+      'Silk-blend drape', 'A small draped overlay with an angled hem.',
+      ['Sangeet', 'Daytime'], color2='peach', pattern2='floral', bg='peach', kid=True,
+      also=['peach', 'rose']),
+    I('kids', 'Navy Bandhgala', 'jodhpuri', 'navy', 'twill',
+      'Twill wool blend', 'Self-twill bandhgala with matching trousers.',
+      ['Formal', 'Reception'], kid=True, also=['navy', 'indigo']),
+    I('kids', 'Cream Threadwork Sherwani', 'sherwani', 'cream', 'scroll',
+      'Matte silk look', 'Tonal threadwork, cut short and easy to move in.',
+      ['Wedding', 'Daytime'], kid=True, also=['cream', 'ivory']),
+
     # ----------------------------------------------------------- tailoring --
     I('tailoring', 'Measure & Fit', 'tools', 'beige', 'plain',
       'Your measurements', 'Sixteen measurements taken by hand, kept on file for '
@@ -1065,6 +1119,7 @@ def main():
             'detail': it['detail'],
             'tags': it['tags'],
             'colours': colours[:4],
+            'kid': bool(it.get('kid')),
         })
 
     for name, maker in (('hero', make_hero), ('logo', make_logo),

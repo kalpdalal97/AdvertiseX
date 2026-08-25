@@ -4,22 +4,31 @@ A static, self-contained website for **Deep Sons**, tailors and cloth merchants.
 It is a *look book*, not a shop: customers browse photographs by section, and no
 prices, MSRPs or currency figures appear anywhere on the site.
 
+## Pages
+
+`index.html` (Home), `men.html` (Men), `about.html` (About Us), and
+`collection.html` for every look-book section.
+
 ## Sections
 
-Each of these is its own section with its own page, colour rail and filters:
+Each of these is its own section with its own page and occasion filters:
 
-| Section | URL |
-| --- | --- |
-| Suiting | `collection.html?c=suiting` |
-| Shirting | `collection.html?c=shirting` |
-| Wedding Designer Sherwani | `collection.html?c=sherwani` |
-| Indo-Western | `collection.html?c=indo-western` |
-| Kurta Jacket Set | `collection.html?c=kurta-jacket` |
-| Jodhpuri | `collection.html?c=jodhpuri` |
-| Customized Tailoring | `collection.html?c=tailoring` |
+| Section | Group | URL |
+| --- | --- | --- |
+| Suiting | men | `collection.html?c=suiting` |
+| Shirting | men | `collection.html?c=shirting` |
+| Wedding Designer Sherwani | men | `collection.html?c=sherwani` |
+| Indo-Western | men | `collection.html?c=indo-western` |
+| Kurta Jacket Set | men | `collection.html?c=kurta-jacket` |
+| Jodhpuri | men | `collection.html?c=jodhpuri` |
+| Customized Tailoring | men | `collection.html?c=tailoring` |
+| Kids | kids | `collection.html?c=kids` |
 
-Plus `collection.html?c=all` (everything) and `collection.html?c=saved` (the
+Plus `collection.html?c=all` (Lookbook) and `collection.html?c=saved` (the
 visitor's own shortlist, kept in their browser only).
+
+Kids items carry `kid: True` in the generator, which draws the figure shorter
+with a proportionally larger head.
 
 ## About the images — no copyright risk
 
@@ -97,8 +106,8 @@ Pages, or ordinary shared hosting).
 
 ## What the site does
 
-* Section landing pages with a Manyavar-style circular colour rail
-* Filter by colour and by occasion; sort by name, colour family or fabric
+* Section landing pages for men's and kids' wear
+* Filter by occasion; sort by name or fabric
 * One-up / two-up grid toggle and a sticky sort–filter bar
 * Full-screen photo viewer with keyboard arrows and swipe
 * "Save" hearts that build a shortlist in the visitor's own browser
@@ -109,8 +118,9 @@ Pages, or ordinary shared hosting).
 
 ```
 index.html            home
+men.html              the men's sections
 collection.html       every section, driven by ?c=<section>
-visit.html            address, hours, what to expect
+about.html            who we are, address, hours, what to expect
 assets/css/style.css  the whole stylesheet
 assets/js/app.js      shop details + all behaviour
 assets/js/catalogue.js  GENERATED — section and item data
