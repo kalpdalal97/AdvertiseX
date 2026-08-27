@@ -164,23 +164,14 @@
     var all = n.menu === 'men'
       ? { href: 'men.html', label: 'View all menswear' }
       : { href: 'collection.html?c=kids', label: 'View everything for kids' };
-    var note = n.menu === 'men'
-      ? { h: 'Made to measure', p: 'Every piece on this rail can be cut to your own ' +
-          'measurements \u2014 your cloth or ours.', href: 'collection.html?c=tailoring',
-          label: 'How we work' }
-      : { h: 'Same cloth, small size', p: 'Cut for the ring bearer and finished like ' +
-          'the grown-up rail.', href: 'about.html', label: 'Come and see us' };
-    return '<div class="mega"><div class="mega__in"><div><div class="mega__grid">' +
+    return '<div class="mega"><div class="mega__in"><div class="mega__grid">' +
       rows.map(function (r) {
         return '<a class="mega__link" href="' + r.href + '">' +
           '<i style="background-image:url(&quot;' + (r.item ? artSrc(r.item) : '') + '&quot;)"></i>' +
           '<span>' + esc(r.label) + '</span></a>';
       }).join('') +
       '</div><a class="mega__all" href="' + all.href + '">' + esc(all.label) +
-      ' &rarr;</a></div>' +
-      '<aside class="mega__note"><b>' + esc(note.h) + '</b><p>' + esc(note.p) + '</p>' +
-      '<a href="' + note.href + '">' + esc(note.label) + ' &rarr;</a></aside>' +
-      '</div></div>';
+      ' &rarr;</a></div></div>';
   }
 
   function buildHeader() {
@@ -206,6 +197,21 @@
           svg('heart') + '<b class="head__count" data-saved-count hidden>0</b></a>' +
       '</div>';
     markNav();
+    positionMenus();
+  }
+
+  /* Keep a dropdown inside the window: it hangs off the left edge of its nav
+     item, and the nav sits at the right of the header, so a wide panel would
+     otherwise run off screen. */
+  function positionMenus() {
+    var edge = document.documentElement.clientWidth - 14;
+    [].forEach.call(document.querySelectorAll('.navitem'), function (item) {
+      var m = item.querySelector('.mega');
+      if (!m) return;
+      m.style.left = '0px';
+      var over = m.getBoundingClientRect().right - edge;
+      if (over > 0) m.style.left = (-Math.ceil(over)) + 'px';
+    });
   }
 
   function buildDrawer() {
@@ -692,6 +698,11 @@
     paintCount();
     initHome();
     initCollection();
+
+    window.addEventListener('resize', positionMenus);
+    document.addEventListener('pointerover', function (e) {
+      if (e.target.closest && e.target.closest('.navitem')) positionMenus();
+    });
 
     document.addEventListener('click', function (e) {
       var row = e.target.closest('.mega__link, .mega__all');
