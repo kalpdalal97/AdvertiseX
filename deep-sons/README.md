@@ -92,6 +92,14 @@ python3 tools/build_artifact.py
 
 The multi-page site is the source of truth; rebuild after any change.
 
+## Checking a change
+
+Every change has to hold on a phone as well as a desktop — the nav, the
+dropdowns and the filters all behave differently below 1040px. Check both
+before calling something done. The single-file build must also carry a
+viewport meta, or a phone lays it out at 980px and shows a shrunken desktop
+page.
+
 ## Running it
 
 It is plain HTML, CSS and JavaScript — no build step, no dependencies, no
@@ -109,7 +117,9 @@ Pages, or ordinary shared hosting).
 
 * Section landing pages for men's and kids' wear
 * Mega dropdowns on Men and Kids: the men's sections, and — since kids is a
-  single section — the garment families inside it, each with a thumbnail
+  single section — the garment families inside it, each with a thumbnail.
+  On a phone the nav wraps to its own row and the panels open on tap
+  (first tap opens, second follows the link)
 * Filter by occasion (Wedding Ceremony, Reception, Sangeet, Engagement,
   Mehendi, Haldi — multi-select) and by garment type; sort by name or fabric
 * One-up / two-up grid toggle and a sticky sort–filter bar

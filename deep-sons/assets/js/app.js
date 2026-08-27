@@ -212,14 +212,27 @@
     positionMenus();
   }
 
+  function wide() {
+    return document.documentElement.clientWidth >= 1040;
+  }
+
+  function closeMenus() {
+    [].forEach.call(document.querySelectorAll('.navitem.is-open'), function (n) {
+      n.classList.remove('is-open');
+    });
+  }
+
   /* Keep a dropdown inside the window: it hangs off the left edge of its nav
      item, and the nav sits at the right of the header, so a wide panel would
-     otherwise run off screen. */
+     otherwise run off screen. Below 1040px the panel spans the header instead,
+     so there is nothing to clamp. */
   function positionMenus() {
     var edge = document.documentElement.clientWidth - 14;
     [].forEach.call(document.querySelectorAll('.navitem'), function (item) {
       var m = item.querySelector('.mega');
       if (!m) return;
+      m.style.left = '';
+      if (!wide()) return;
       m.style.left = '0px';
       var over = m.getBoundingClientRect().right - edge;
       if (over > 0) m.style.left = (-Math.ceil(over)) + 'px';
@@ -385,6 +398,8 @@
     }
     return 'home';
   }
+
+  window.DS_CLOSE_MENUS = closeMenus;
 
   function markNav(route) {
     var want = navTarget(route == null ? currentRoute() : route);
@@ -780,7 +795,29 @@
     initHome();
     initCollection();
 
-    window.addEventListener('resize', positionMenus);
+    window.addEventListener('resize', function () {
+      if (wide()) closeMenus();
+      positionMenus();
+    });
+
+    /* Touch has no hover, so on a phone the first tap on Men or Kids opens the
+       panel and the second follows the link. Capture phase, because the
+       single-file build's router also listens for clicks on document. */
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest && e.target.closest('.navitem > a');
+      if (!link || wide()) return;
+      var item = link.parentNode;
+      if (item.classList.contains('is-open')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      closeMenus();
+      item.classList.add('is-open');
+    }, true);
+
+    // tapping anywhere else puts the panel away
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest || !e.target.closest('.navitem')) closeMenus();
+    });
     document.addEventListener('pointerover', function (e) {
       if (e.target.closest && e.target.closest('.navitem')) positionMenus();
     });

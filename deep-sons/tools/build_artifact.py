@@ -158,6 +158,7 @@ ROUTER = """
   }
 
   function dismissOverlays() {
+    if (window.DS_CLOSE_MENUS) window.DS_CLOSE_MENUS();
     var drawer = document.querySelector('.drawer');
     if (drawer) { drawer.classList.remove('is-on'); drawer.setAttribute('aria-hidden', 'true'); }
     var sheet = document.querySelector('.sheet');
@@ -245,6 +246,9 @@ def main():
 
     out = []
     out.append('<title>Deep Sons</title>')
+    # without this a phone lays the page out at 980px and shows a shrunken
+    # desktop site
+    out.append('<meta name="viewport" content="width=device-width, initial-scale=1">')
     out.append('<meta name="description" content="Look book for Deep Sons: suiting, '
                'shirting, wedding designer sherwani, indo-western, kurta jacket sets, '
                'jodhpuri and customized tailoring.">')

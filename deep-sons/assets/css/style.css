@@ -78,14 +78,14 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
 
 .head {
   position: sticky; top: 0; z-index: 40;
-  height: var(--head-h);
   background: rgba(251, 246, 236, .94);
   backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--line);
 }
 .head__in {
-  height: 100%; display: flex; align-items: center; gap: 10px;
+  min-height: var(--head-h); display: flex; align-items: center; gap: 10px;
   max-width: var(--wrap); margin: 0 auto; padding: 0 12px;
+  flex-wrap: wrap;
 }
 .icon-btn {
   width: 42px; height: 42px; display: grid; place-items: center;
@@ -120,18 +120,34 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
 }
 .head__count[hidden] { display: none; }
 
-/* desktop inline nav */
-.head__nav { display: none; gap: 22px; }
+/* nav: a second scrollable row on a phone, inline on a desktop */
+.head__nav {
+  display: flex; align-items: center; gap: 20px;
+  order: 5; flex: 0 0 100%;
+  overflow-x: auto; scrollbar-width: none;
+  border-top: 1px solid var(--line);
+  margin-top: 2px; padding: 7px 2px;
+}
+.head__nav::-webkit-scrollbar { display: none; }
+
+.head__nav > a, .head__nav > .navitem > a {
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-2); padding: 3px 0; border-bottom: 1.5px solid transparent;
+}
+.head__nav > a:hover, .head__nav > .navitem > a:hover,
+.head__nav [data-nav][aria-current="page"] {
+  color: var(--ink); border-color: var(--gold);
+}
+
 @media (min-width: 1040px) {
-  .head__nav { display: flex; }
+  .head__nav {
+    order: 0; flex: 0 1 auto; gap: 22px;
+    border-top: none; margin-top: 0; padding: 0; overflow: visible;
+  }
   .head__nav > a, .head__nav > .navitem > a {
     display: flex; align-items: center; gap: 5px;
-    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--ink-2); padding: 4px 0; border-bottom: 1.5px solid transparent;
-  }
-  .head__nav > a:hover, .head__nav > .navitem > a:hover,
-  .head__nav [data-nav][aria-current="page"] {
-    color: var(--ink); border-color: var(--gold);
+    padding: 4px 0;
   }
   .head__burger { display: none; }
 }
@@ -453,8 +469,11 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
 }
 
 .navitem:hover > .mega,
-.navitem:focus-within > .mega { opacity: 1; visibility: visible; transform: none; }
+.navitem:focus-within > .mega,
+.navitem.is-open > .mega { opacity: 1; visibility: visible; transform: none; }
 .navitem.is-shut > .mega { opacity: 0; visibility: hidden; transform: translateY(-8px); }
+
+
 
 .mega__in {
   padding: 20px 28px 22px;
@@ -491,6 +510,29 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
   border-bottom: 1px solid currentColor; padding-bottom: 3px;
 }
 .mega__all:hover { color: var(--maroon); }
+
+@media (max-width: 1039px) {
+  /* no hover on a touch screen: the first tap opens, the second follows the
+     link, and the panel spans the header rather than hanging off the item */
+  .navitem { position: static; }
+  .navitem:hover > .mega { opacity: 0; visibility: hidden; transform: translateY(-8px); }
+  .navitem.is-open > .mega { opacity: 1; visibility: visible; transform: none; }
+  .mega {
+    left: 0 !important; right: 0; width: auto;
+    max-height: 68vh; overflow-y: auto;
+    border-left: none; border-right: none;
+  }
+  .mega .mega__grid { grid-template-columns: 1fr; column-gap: 0; }
+  .mega__in { padding: 12px 18px 18px; }
+  .mega__link { padding: 10px 2px; }
+}
+
+@media (max-width: 480px) {
+  /* fit all five nav items across a phone without a scroll */
+  .head__nav { gap: 14px; }
+  .head__nav > a, .head__nav > .navitem > a { font-size: 11.5px; letter-spacing: .1em; }
+  .chev { width: 11px; height: 11px; }
+}
 
 /* ------------------------------------------------------------- lookbook -- */
 
