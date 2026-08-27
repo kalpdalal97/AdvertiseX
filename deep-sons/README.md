@@ -28,7 +28,9 @@ Plus `collection.html?c=all` (Lookbook) and `collection.html?c=saved` (the
 visitor's own shortlist, kept in their browser only).
 
 Kids items carry `kid: True` in the generator, which draws the figure shorter
-with a proportionally larger head.
+with a proportionally larger head. Every item also carries a `type` (Sherwani,
+Jodhpuri, Kurta Jacket Set …), which drives `?type=` filtering and the Kids
+dropdown.
 
 ## About the images — no copyright risk
 
@@ -107,7 +109,9 @@ Pages, or ordinary shared hosting).
 ## What the site does
 
 * Section landing pages for men's and kids' wear
-* Filter by occasion; sort by name or fabric
+* Mega dropdowns on Men and Kids: the men's sections, and — since kids is a
+  single section — the garment families inside it, each with a thumbnail
+* Filter by occasion and by garment type; sort by name or fabric
 * One-up / two-up grid toggle and a sticky sort–filter bar
 * Full-screen photo viewer with keyboard arrows and swipe
 * "Save" hearts that build a shortlist in the visitor's own browser

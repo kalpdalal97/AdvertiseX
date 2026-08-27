@@ -66,6 +66,7 @@ window.DS = {
       "img": "assets/img/suiting-charcoal-herringbone-length.svg",
       "fabric": "All-season wool blend",
       "weave": "Herringbone",
+      "type": "Cloth by the Length",
       "detail": "Classic herringbone that reads plain from a distance.",
       "tags": [
         "Formal",
@@ -86,6 +87,7 @@ window.DS = {
       "img": "assets/img/suiting-midnight-navy-pinstripe.svg",
       "fabric": "Fine worsted blend",
       "weave": "Pinstripe",
+      "type": "Cloth by the Length",
       "detail": "Chalk-fine stripe on a deep navy ground.",
       "tags": [
         "Formal",
@@ -105,6 +107,7 @@ window.DS = {
       "img": "assets/img/suiting-slate-windowpane-length.svg",
       "fabric": "Wool-rich suiting",
       "weave": "Windowpane check",
+      "type": "Cloth by the Length",
       "detail": "Wide windowpane for a relaxed business look.",
       "tags": [
         "Office",
@@ -123,6 +126,7 @@ window.DS = {
       "img": "assets/img/suiting-ink-black-twill.svg",
       "fabric": "Matte twill weave",
       "weave": "Twill weave",
+      "type": "Cloth by the Length",
       "detail": "Deep, even black with a dry finish.",
       "tags": [
         "Formal",
@@ -142,6 +146,7 @@ window.DS = {
       "img": "assets/img/suiting-bottle-green-glen-check-suit.svg",
       "fabric": "Wool blend, half-canvas",
       "weave": "Glen check",
+      "type": "Two-Piece Suit",
       "detail": "Notch lapel, two-button front, side vents.",
       "tags": [
         "Reception",
@@ -160,6 +165,7 @@ window.DS = {
       "img": "assets/img/suiting-royal-blue-two-piece.svg",
       "fabric": "Smooth worsted finish",
       "weave": "Plain weave",
+      "type": "Two-Piece Suit",
       "detail": "Clean-front jacket with a soft shoulder.",
       "tags": [
         "Reception",
@@ -179,6 +185,7 @@ window.DS = {
       "img": "assets/img/suiting-beige-summer-two-piece.svg",
       "fabric": "Light open weave",
       "weave": "Twill weave",
+      "type": "Two-Piece Suit",
       "detail": "Unlined body for warm-weather day functions.",
       "tags": [
         "Daytime",
@@ -197,6 +204,7 @@ window.DS = {
       "img": "assets/img/suiting-charcoal-formal-suit.svg",
       "fabric": "Worsted blend",
       "weave": "Pinstripe",
+      "type": "Two-Piece Suit",
       "detail": "Structured chest, full-canvas front, working cuffs.",
       "tags": [
         "Formal",
@@ -216,6 +224,7 @@ window.DS = {
       "img": "assets/img/shirting-pure-white-poplin.svg",
       "fabric": "2-ply cotton poplin",
       "weave": "Plain weave",
+      "type": "Cloth by the Length",
       "detail": "The one length that goes with everything above.",
       "tags": [
         "Formal",
@@ -234,6 +243,7 @@ window.DS = {
       "img": "assets/img/shirting-sky-blue-dobby.svg",
       "fabric": "Cotton dobby",
       "weave": "Dobby dot",
+      "type": "Cloth by the Length",
       "detail": "Self-textured dot that catches light at the collar.",
       "tags": [
         "Office",
@@ -252,6 +262,7 @@ window.DS = {
       "img": "assets/img/shirting-powder-blue-fine-stripe.svg",
       "fabric": "Cotton shirting",
       "weave": "Pinstripe",
+      "type": "Shirt",
       "detail": "Cutaway collar, single-button barrel cuff.",
       "tags": [
         "Office",
@@ -270,6 +281,7 @@ window.DS = {
       "img": "assets/img/shirting-ivory-textured-weave.svg",
       "fabric": "Cotton-linen mix",
       "weave": "Dobby dot",
+      "type": "Shirt",
       "detail": "Soft-roll collar with a lightly fused placket.",
       "tags": [
         "Daytime",
@@ -288,6 +300,7 @@ window.DS = {
       "img": "assets/img/shirting-lilac-micro-check.svg",
       "fabric": "Yarn-dyed cotton",
       "weave": "Gingham check",
+      "type": "Cloth by the Length",
       "detail": "Small check that stays quiet under a jacket.",
       "tags": [
         "Office",
@@ -306,6 +319,7 @@ window.DS = {
       "img": "assets/img/shirting-sage-cotton-check.svg",
       "fabric": "Yarn-dyed cotton",
       "weave": "Gingham check",
+      "type": "Shirt",
       "detail": "Button-down collar, patch chest pocket.",
       "tags": [
         "Casual",
@@ -324,6 +338,7 @@ window.DS = {
       "img": "assets/img/shirting-charcoal-twill-shirt.svg",
       "fabric": "Brushed cotton twill",
       "weave": "Twill weave",
+      "type": "Shirt",
       "detail": "Hidden placket and a slightly longer point collar.",
       "tags": [
         "Evening",
@@ -342,6 +357,7 @@ window.DS = {
       "img": "assets/img/shirting-cream-linen-look-shirt.svg",
       "fabric": "Linen-blend shirting",
       "weave": "Plain weave",
+      "type": "Shirt",
       "detail": "Relaxed body, mother-of-pearl style buttons.",
       "tags": [
         "Daytime",
@@ -360,6 +376,7 @@ window.DS = {
       "img": "assets/img/sherwani-ivory-zardozi-sherwani.svg",
       "fabric": "Raw-silk look base",
       "weave": "Threadwork scroll",
+      "type": "Sherwani",
       "detail": "Scrolling threadwork over the chest and full placket.",
       "tags": [
         "Wedding",
@@ -379,6 +396,7 @@ window.DS = {
       "img": "assets/img/sherwani-gold-brocade-sherwani.svg",
       "fabric": "Brocade weave",
       "weave": "Brocade",
+      "type": "Sherwani",
       "detail": "All-over brocade with a plain contrast churidar.",
       "tags": [
         "Wedding",
@@ -397,6 +415,7 @@ window.DS = {
       "img": "assets/img/sherwani-maroon-jaal-sherwani.svg",
       "fabric": "Silk-blend base",
       "weave": "Jaal lattice",
+      "type": "Sherwani",
       "detail": "Jaal lattice ground with a zari hem border.",
       "tags": [
         "Wedding",
@@ -415,6 +434,7 @@ window.DS = {
       "img": "assets/img/sherwani-bottle-green-threadwork.svg",
       "fabric": "Silk-blend base",
       "weave": "Threadwork scroll",
+      "type": "Sherwani",
       "detail": "Tonal threadwork with an antique-gold placket.",
       "tags": [
         "Wedding",
@@ -433,6 +453,7 @@ window.DS = {
       "img": "assets/img/sherwani-wine-paisley-sherwani.svg",
       "fabric": "Textured silk look",
       "weave": "Paisley buta",
+      "type": "Sherwani",
       "detail": "Paisley buta placed across the body and sleeve.",
       "tags": [
         "Reception",
@@ -451,6 +472,7 @@ window.DS = {
       "img": "assets/img/sherwani-cream-floral-sherwani.svg",
       "fabric": "Matte silk look",
       "weave": "Floral vine",
+      "type": "Sherwani",
       "detail": "Soft floral vine, ideal for a daytime ceremony.",
       "tags": [
         "Wedding",
@@ -470,6 +492,7 @@ window.DS = {
       "img": "assets/img/sherwani-navy-zari-sherwani.svg",
       "fabric": "Silk-blend base",
       "weave": "Zari stripe",
+      "type": "Sherwani",
       "detail": "Fine zari striping with a high mandarin collar.",
       "tags": [
         "Reception",
@@ -488,6 +511,7 @@ window.DS = {
       "img": "assets/img/sherwani-rose-gold-buti-sherwani.svg",
       "fabric": "Tissue-look blend",
       "weave": "Buti motif",
+      "type": "Sherwani",
       "detail": "Scattered buti motif with a tonal hem band.",
       "tags": [
         "Wedding",
@@ -507,6 +531,7 @@ window.DS = {
       "img": "assets/img/indo-western-emerald-cape-indo-western.svg",
       "fabric": "Silk-blend drape",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Cape-cut overlay pinned at the shoulder.",
       "tags": [
         "Sangeet",
@@ -526,6 +551,7 @@ window.DS = {
       "img": "assets/img/indo-western-ink-black-asymmetric.svg",
       "fabric": "Matte blend",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Angled hem with a tonal trim along the fall.",
       "tags": [
         "Cocktail",
@@ -544,6 +570,7 @@ window.DS = {
       "img": "assets/img/indo-western-wine-drape-indo-western.svg",
       "fabric": "Silk-blend drape",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Floral drape over an ivory tunic base.",
       "tags": [
         "Sangeet",
@@ -563,6 +590,7 @@ window.DS = {
       "img": "assets/img/indo-western-teal-layered-indo-western.svg",
       "fabric": "Brocade overlay",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Long brocade panel layered to one side.",
       "tags": [
         "Cocktail",
@@ -582,6 +610,7 @@ window.DS = {
       "img": "assets/img/indo-western-copper-cowl-indo-western.svg",
       "fabric": "Textured blend",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Chevron-worked cowl drape with a soft fall.",
       "tags": [
         "Sangeet",
@@ -601,6 +630,7 @@ window.DS = {
       "img": "assets/img/indo-western-indigo-angled-indo-western.svg",
       "fabric": "Silk-blend drape",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Buti-worked overlay with a sharp diagonal hem.",
       "tags": [
         "Cocktail",
@@ -620,6 +650,7 @@ window.DS = {
       "img": "assets/img/indo-western-sage-overlay-indo-western.svg",
       "fabric": "Matte silk look",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Paisley overlay in a muted sage for daytime.",
       "tags": [
         "Daytime",
@@ -639,6 +670,7 @@ window.DS = {
       "img": "assets/img/indo-western-rust-panelled-indo-western.svg",
       "fabric": "Silk-blend drape",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "Panelled front with a jaal-worked overlay.",
       "tags": [
         "Mehendi",
@@ -658,6 +690,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-emerald-sparkle-set.svg",
       "fabric": "Silk-blend kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Plain emerald kurta under a lattice-worked jacket.",
       "tags": [
         "Festive",
@@ -676,6 +709,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-radiant-mustard-set.svg",
       "fabric": "Printed kurta",
       "weave": "Floral vine",
+      "type": "Kurta Jacket Set",
       "detail": "Floral kurta matched to a tonal jacket.",
       "tags": [
         "Festive",
@@ -695,6 +729,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-beige-patchwork-set.svg",
       "fabric": "Cotton-silk kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Patch-effect jacket over a plain beige kurta.",
       "tags": [
         "Daytime",
@@ -713,6 +748,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-sage-jaal-set.svg",
       "fabric": "Silk-blend kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Jaal-worked jacket in a deeper olive.",
       "tags": [
         "Mehendi",
@@ -731,6 +767,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-ivory-motif-set.svg",
       "fabric": "Matte silk look",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Buti-worked jacket with a fine tonal border.",
       "tags": [
         "Wedding",
@@ -749,6 +786,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-navy-brocade-set.svg",
       "fabric": "Silk-blend kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Brocade jacket, plain navy kurta and churidar.",
       "tags": [
         "Evening",
@@ -767,6 +805,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-maroon-paisley-set.svg",
       "fabric": "Silk-blend kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Paisley jacket worked in matching thread.",
       "tags": [
         "Festive",
@@ -785,6 +824,7 @@ window.DS = {
       "img": "assets/img/kurta-jacket-powder-bandhani-set.svg",
       "fabric": "Cotton-silk kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Bandhani-effect jacket over a powder blue kurta.",
       "tags": [
         "Daytime",
@@ -804,6 +844,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-black-bandhgala.svg",
       "fabric": "Matte wool blend",
       "weave": "Plain weave",
+      "type": "Jodhpuri",
       "detail": "Closed collar, five-button front, matching trouser.",
       "tags": [
         "Formal",
@@ -822,6 +863,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-ink-navy-bandhgala.svg",
       "fabric": "Twill wool blend",
       "weave": "Twill weave",
+      "type": "Jodhpuri",
       "detail": "Self-twill ground with a lightly padded shoulder.",
       "tags": [
         "Formal",
@@ -840,6 +882,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-bottle-green-jodhpuri.svg",
       "fabric": "Brocade weave",
       "weave": "Brocade",
+      "type": "Jodhpuri",
       "detail": "Ceremonial brocade with a plain collar band.",
       "tags": [
         "Wedding",
@@ -858,6 +901,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-wine-textured-jodhpuri.svg",
       "fabric": "Textured silk look",
       "weave": "Threadwork scroll",
+      "type": "Jodhpuri",
       "detail": "Tonal threadwork across the chest and collar.",
       "tags": [
         "Reception",
@@ -876,6 +920,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-charcoal-self-check-jodhpuri.svg",
       "fabric": "Wool blend",
       "weave": "Glen check",
+      "type": "Jodhpuri",
       "detail": "Quiet self-check for formal daytime wear.",
       "tags": [
         "Office",
@@ -894,6 +939,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-ivory-ceremonial-jodhpuri.svg",
       "fabric": "Raw-silk look",
       "weave": "Buti motif",
+      "type": "Jodhpuri",
       "detail": "Scattered buti with a contrast collar brooch.",
       "tags": [
         "Wedding",
@@ -912,6 +958,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-maroon-zari-jodhpuri.svg",
       "fabric": "Silk-blend base",
       "weave": "Zari stripe",
+      "type": "Jodhpuri",
       "detail": "Fine zari striping, ceremonial finish.",
       "tags": [
         "Wedding",
@@ -930,6 +977,7 @@ window.DS = {
       "img": "assets/img/jodhpuri-teal-jaal-jodhpuri.svg",
       "fabric": "Silk-blend base",
       "weave": "Jaal lattice",
+      "type": "Jodhpuri",
       "detail": "Jaal lattice ground with a tonal button set.",
       "tags": [
         "Reception",
@@ -948,6 +996,7 @@ window.DS = {
       "img": "assets/img/kids-ivory-kurta-jacket-set.svg",
       "fabric": "Cotton-silk kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Lattice-worked jacket over a plain ivory kurta.",
       "tags": [
         "Wedding",
@@ -966,6 +1015,7 @@ window.DS = {
       "img": "assets/img/kids-royal-blue-jodhpuri.svg",
       "fabric": "Soft wool blend",
       "weave": "Plain weave",
+      "type": "Jodhpuri",
       "detail": "A proper bandhgala with a closed collar and five buttons.",
       "tags": [
         "Wedding",
@@ -984,6 +1034,7 @@ window.DS = {
       "img": "assets/img/kids-maroon-brocade-sherwani.svg",
       "fabric": "Brocade weave",
       "weave": "Brocade",
+      "type": "Sherwani",
       "detail": "Full-length sherwani with a zari placket and hem band.",
       "tags": [
         "Wedding",
@@ -1002,6 +1053,7 @@ window.DS = {
       "img": "assets/img/kids-mustard-floral-kurta.svg",
       "fabric": "Printed cotton-silk",
       "weave": "Floral vine",
+      "type": "Kurta",
       "detail": "Light printed kurta and churidar for a daytime function.",
       "tags": [
         "Haldi",
@@ -1020,6 +1072,7 @@ window.DS = {
       "img": "assets/img/kids-bottle-green-jacket-set.svg",
       "fabric": "Silk-blend kurta",
       "weave": "Plain weave",
+      "type": "Kurta Jacket Set",
       "detail": "Buti-worked jacket over a deep green kurta.",
       "tags": [
         "Festive",
@@ -1038,6 +1091,7 @@ window.DS = {
       "img": "assets/img/kids-peach-indo-western.svg",
       "fabric": "Silk-blend drape",
       "weave": "Plain weave",
+      "type": "Indo-Western",
       "detail": "A small draped overlay with an angled hem.",
       "tags": [
         "Sangeet",
@@ -1057,6 +1111,7 @@ window.DS = {
       "img": "assets/img/kids-navy-bandhgala.svg",
       "fabric": "Twill wool blend",
       "weave": "Twill weave",
+      "type": "Jodhpuri",
       "detail": "Self-twill bandhgala with matching trousers.",
       "tags": [
         "Formal",
@@ -1075,6 +1130,7 @@ window.DS = {
       "img": "assets/img/kids-cream-threadwork-sherwani.svg",
       "fabric": "Matte silk look",
       "weave": "Threadwork scroll",
+      "type": "Sherwani",
       "detail": "Tonal threadwork, cut short and easy to move in.",
       "tags": [
         "Wedding",
@@ -1093,6 +1149,7 @@ window.DS = {
       "img": "assets/img/tailoring-measure-and-fit.svg",
       "fabric": "Your measurements",
       "weave": "Plain weave",
+      "type": "In the Workroom",
       "detail": "Sixteen measurements taken by hand, kept on file for every future order.",
       "tags": [
         "Made to Measure"
@@ -1109,6 +1166,7 @@ window.DS = {
       "img": "assets/img/tailoring-the-cutting-table.svg",
       "fabric": "Cut in house",
       "weave": "Twill weave",
+      "type": "In the Workroom",
       "detail": "Every length is chalked and cut on our own table, never sub-contracted.",
       "tags": [
         "Made to Measure"
@@ -1125,6 +1183,7 @@ window.DS = {
       "img": "assets/img/tailoring-canvas-and-construction.svg",
       "fabric": "Half and full canvas",
       "weave": "Herringbone",
+      "type": "Made to Measure",
       "detail": "Choose the internal construction that suits how you wear the jacket.",
       "tags": [
         "Suiting",
@@ -1142,6 +1201,7 @@ window.DS = {
       "img": "assets/img/tailoring-bespoke-suit-trial.svg",
       "fabric": "Two fittings included",
       "weave": "Pinstripe",
+      "type": "Made to Measure",
       "detail": "A basted trial before finishing, so the shoulder and the sleeve pitch are yours.",
       "tags": [
         "Suiting",
@@ -1159,6 +1219,7 @@ window.DS = {
       "img": "assets/img/tailoring-hand-finished-details.svg",
       "fabric": "Hand finishing",
       "weave": "Threadwork scroll",
+      "type": "In the Workroom",
       "detail": "Buttonholes, hems and linings finished by hand where it shows and where it matters.",
       "tags": [
         "Made to Measure"
@@ -1175,6 +1236,7 @@ window.DS = {
       "img": "assets/img/tailoring-made-to-measure-sherwani.svg",
       "fabric": "Your cloth or ours",
       "weave": "Brocade",
+      "type": "Sherwani",
       "detail": "Wedding wear cut to your own length, collar height and placket.",
       "tags": [
         "Wedding",

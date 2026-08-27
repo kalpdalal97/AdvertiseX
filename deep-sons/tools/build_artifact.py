@@ -100,22 +100,16 @@ def patch_app(js):
     assert '.html' not in js, 'stray page link left in app.js'
 
     # 3. artwork comes from the inline map rather than a file path
-    js = sub1(js, "  function esc(s) {",
-              "  var ART_CACHE = {};\n"
-              "  function art(id) {\n"
-              "    if (!ART_CACHE[id]) {\n"
-              "      var raw = (window.DS_ART || {})[id];\n"
-              "      ART_CACHE[id] = raw ? 'data:image/svg+xml,' + encodeURIComponent(raw) : '';\n"
-              "    }\n"
-              "    return ART_CACHE[id];\n"
-              "  }\n\n"
-              "  function esc(s) {", 'artwork lookup')
-    js = sub1(js, "'<img src=\"' + item.img + '\"", "'<img src=\"' + art(item.id) + '\"",
-              'card artwork')
-    js = sub1(js, "lb.node.querySelector('[data-lb-img]').src = it.img;",
-              "lb.node.querySelector('[data-lb-img]').src = art(it.id);", 'viewer artwork')
-    js = sub1(js, "'<img src=\"' + cover.img + '\"", "'<img src=\"' + art(cover.id) + '\"",
-              'section cover artwork')
+    js = sub1(js, """  function artSrc(item) {
+    return item.img;
+  }""", """  var ART_CACHE = {};
+  function artSrc(item) {
+    if (!ART_CACHE[item.id]) {
+      var raw = (window.DS_ART || {})[item.id];
+      ART_CACHE[item.id] = raw ? 'data:image/svg+xml,' + encodeURIComponent(raw) : '';
+    }
+    return ART_CACHE[item.id];
+  }""", 'artwork lookup')
 
     # 4. collection state lives in the hash, and is only ever written back
     #    onto a hash that is already a collection route -- otherwise the

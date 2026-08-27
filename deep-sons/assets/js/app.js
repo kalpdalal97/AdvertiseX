@@ -36,8 +36,8 @@
 
   var NAV = [
     { key: 'home', label: 'Home', href: 'index.html' },
-    { key: 'men', label: 'Men', href: 'men.html' },
-    { key: 'kids', label: 'Kids', href: 'collection.html?c=kids' },
+    { key: 'men', label: 'Men', href: 'men.html', menu: 'men' },
+    { key: 'kids', label: 'Kids', href: 'collection.html?c=kids', menu: 'kids' },
     { key: 'lookbook', label: 'Lookbook', href: 'collection.html?c=all' },
     { key: 'about', label: 'About Us', href: 'about.html' }
   ];
@@ -52,6 +52,7 @@
   var ICON = {
     burger: '<path d="M3 6h18M3 12h18M3 18h18"/>',
     close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    chev: '<path d="M6 9l6 6 6-6"/>',
     heart: '<path d="M12 20.5S3.5 15 3.5 9.2A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.5 2.8c0 5.8-8.5 11.3-8.5 11.3z"/>',
     sort: '<path d="M7 4v16M7 20l-3-3M7 4l3 3M17 20V4M17 4l-3 3M17 20l3-3"/>',
     filter: '<path d="M3 5h18M6 12h12M10 19h4"/>',
@@ -90,6 +91,12 @@
     return null;
   }
 
+  /* Where a piece's artwork comes from. The single-file build replaces this
+     with a lookup into its inline map. */
+  function artSrc(item) {
+    return item.img;
+  }
+
   function isWide(item) {
     return item.id.indexOf('tailoring-measure') === 0 ||
       item.id.indexOf('tailoring-the-cutting') === 0 ||
@@ -124,11 +131,68 @@
 
   /* -------------------------------------------------------------- chrome -- */
 
+  function coverOf(sectionId) {
+    return itemById(SECTION_COVER[sectionId]) ||
+      ITEMS.filter(function (i) { return i.section === sectionId; })[0];
+  }
+
+  /* The rows of a nav dropdown: the men's sections, or — since kids is a
+     single section — the garment families inside it. */
+  function menuRows(kind) {
+    if (kind === 'men') {
+      return SECTIONS.filter(function (s) { return s.group === 'men'; })
+        .map(function (s) {
+          return { href: 'collection.html?c=' + s.id, label: s.name, item: coverOf(s.id) };
+        });
+    }
+    var rows = [], seen = [];
+    ITEMS.forEach(function (i) {
+      if (i.section !== 'kids' || !i.type || seen.indexOf(i.type) > -1) return;
+      seen.push(i.type);
+      rows.push({
+        href: 'collection.html?c=kids&type=' + encodeURIComponent(i.type),
+        label: i.type,
+        item: i
+      });
+    });
+    return rows;
+  }
+
+  function megaHtml(n) {
+    var rows = menuRows(n.menu);
+    if (!rows.length) return '';
+    var all = n.menu === 'men'
+      ? { href: 'men.html', label: 'View all menswear' }
+      : { href: 'collection.html?c=kids', label: 'View everything for kids' };
+    var note = n.menu === 'men'
+      ? { h: 'Made to measure', p: 'Every piece on this rail can be cut to your own ' +
+          'measurements \u2014 your cloth or ours.', href: 'collection.html?c=tailoring',
+          label: 'How we work' }
+      : { h: 'Same cloth, small size', p: 'Cut for the ring bearer and finished like ' +
+          'the grown-up rail.', href: 'about.html', label: 'Come and see us' };
+    return '<div class="mega"><div class="mega__in"><div><div class="mega__grid">' +
+      rows.map(function (r) {
+        return '<a class="mega__link" href="' + r.href + '">' +
+          '<i style="background-image:url(&quot;' + (r.item ? artSrc(r.item) : '') + '&quot;)"></i>' +
+          '<span>' + esc(r.label) + '</span></a>';
+      }).join('') +
+      '</div><a class="mega__all" href="' + all.href + '">' + esc(all.label) +
+      ' &rarr;</a></div>' +
+      '<aside class="mega__note"><b>' + esc(note.h) + '</b><p>' + esc(note.p) + '</p>' +
+      '<a href="' + note.href + '">' + esc(note.label) + ' &rarr;</a></aside>' +
+      '</div></div>';
+  }
+
   function buildHeader() {
     var host = document.querySelector('[data-header]');
     if (!host) return;
     var links = NAV.map(function (n) {
-      return '<a href="' + n.href + '" data-nav="' + n.key + '">' + esc(n.label) + '</a>';
+      if (!n.menu) {
+        return '<a href="' + n.href + '" data-nav="' + n.key + '">' + esc(n.label) + '</a>';
+      }
+      return '<span class="navitem"><a href="' + n.href + '" data-nav="' + n.key +
+        '" aria-haspopup="true">' + esc(n.label) + svg('chev', 'chev') + '</a>' +
+        megaHtml(n) + '</span>';
     }).join('');
     host.innerHTML =
       '<div class="head__in">' +
@@ -243,7 +307,7 @@
   function cardHtml(item) {
     return '<article class="card' + (isWide(item) ? ' is-wide' : '') + '" data-id="' + item.id + '">' +
       '<a class="card__shot" href="#" data-open="' + item.id + '">' +
-        '<img src="' + item.img + '" alt="' + esc(item.title) + '" loading="lazy" width="800" height="1100">' +
+        '<img src="' + artSrc(item) + '" alt="' + esc(item.title) + '" loading="lazy" width="800" height="1100">' +
       '</a>' +
       '<button class="heart' + (isSaved(item.id) ? ' is-on' : '') + '" data-save="' + item.id + '" ' +
         'aria-pressed="' + isSaved(item.id) + '" aria-label="Save ' + esc(item.title) + '">' +
@@ -299,7 +363,7 @@
 
   function markNav(route) {
     var want = navTarget(route == null ? currentRoute() : route);
-    [].forEach.call(document.querySelectorAll('.head__nav a'), function (a) {
+    [].forEach.call(document.querySelectorAll('.head__nav [data-nav]'), function (a) {
       if (a.getAttribute('data-nav') === want) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
@@ -350,7 +414,7 @@
   function paintLb() {
     var it = lb.list[lb.i];
     if (!it) return;
-    lb.node.querySelector('[data-lb-img]').src = it.img;
+    lb.node.querySelector('[data-lb-img]').src = artSrc(it);
     lb.node.querySelector('[data-lb-img]').alt = it.title;
     lb.node.querySelector('[data-lb-count]').textContent = (lb.i + 1) + ' / ' + lb.list.length;
     var sec = sectionById(it.section);
@@ -395,7 +459,7 @@
       host.innerHTML = list.map(function (s) {
         var cover = itemById(SECTION_COVER[s.id]) || ITEMS.filter(function (i) { return i.section === s.id; })[0];
         return '<a class="sect" href="collection.html?c=' + s.id + '">' +
-          '<img src="' + cover.img + '" alt="' + esc(s.name) + '" loading="lazy">' +
+          '<img src="' + artSrc(cover) + '" alt="' + esc(s.name) + '" loading="lazy">' +
           '<div class="sect__cap"><em>' + esc(s.kicker) + '</em><b>' + esc(s.name) + '</b>' +
           '<p>' + esc(s.blurb) + '</p></div></a>';
       }).join('');
@@ -425,6 +489,7 @@
     var qs = readQuery();
     var state = {
       c: qs.get('c') || 'all',
+      type: qs.get('type') || '',
       tag: qs.get('tag') || '',
       sort: 'picked',
       view: 2
@@ -446,6 +511,7 @@
 
     function visible() {
       var list = pool();
+      if (state.type) list = list.filter(function (i) { return i.type === state.type; });
       if (state.tag) list = list.filter(function (i) { return i.tags.indexOf(state.tag) > -1; });
       if (state.sort === 'az') list.sort(function (a, b) { return a.title.localeCompare(b.title); });
       if (state.sort === 'za') list.sort(function (a, b) { return b.title.localeCompare(a.title); });
@@ -466,6 +532,7 @@
       } else {
         name = s.name; kicker = s.kicker; blurb = s.blurb;
       }
+      if (state.type) { kicker = name; name = state.type; }
       document.title = name + ' — ' + CONFIG.name;
       headEl.innerHTML = '<p class="kicker">' + esc(kicker) + '</p><h1>' + esc(name) + '</h1>' +
         '<p>' + esc(blurb) + '</p>';
@@ -504,7 +571,7 @@
       var lab = root.querySelector('[data-sort-label]');
       if (lab) lab.textContent = s ? s[1] : 'Hand-picked';
       var fl = root.querySelector('[data-filter-label]');
-      var n = state.tag ? 1 : 0;
+      var n = (state.tag ? 1 : 0) + (state.type ? 1 : 0);
       if (fl) fl.textContent = n ? n + ' applied' : 'Apply filter';
       var dot = root.querySelector('[data-filter-dot]');
       if (dot) dot.hidden = n === 0;
@@ -516,6 +583,7 @@
     function sync() {
       var p = new URLSearchParams();
       p.set('c', state.c);
+      if (state.type) p.set('type', state.type);
       if (state.tag) p.set('tag', state.tag);
       writeQuery(p);
     }
@@ -527,6 +595,7 @@
     root.__applyRoute = function (params) {
       var q = params || readQuery();
       state.c = q.get('c') || 'all';
+      state.type = q.get('type') || '';
       state.tag = q.get('tag') || '';
       render();
     };
@@ -567,8 +636,18 @@
       } else {
         var tags = [];
         pool().forEach(function (i) { i.tags.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); }); });
-        tags.sort();
+        var types = [];
+        pool().forEach(function (i) { if (i.type && types.indexOf(i.type) < 0) types.push(i.type); });
+        tags.sort(); types.sort();
         body.innerHTML =
+          (types.length > 1
+            ? '<h5>Garment</h5><div class="sheet__opts">' +
+                '<button class="chip' + (state.type ? '' : ' is-on') + '" data-type="">All</button>' +
+                types.map(function (t) {
+                  return '<button class="chip' + (state.type === t ? ' is-on' : '') +
+                    '" data-type="' + esc(t) + '">' + esc(t) + '</button>';
+                }).join('') + '</div>'
+            : '') +
           '<h5>Occasion &amp; use</h5><div class="sheet__opts">' +
             '<button class="chip' + (state.tag ? '' : ' is-on') + '" data-tag="">All</button>' +
             tags.map(function (t) {
@@ -586,9 +665,13 @@
 
     sheet.addEventListener('click', function (e) {
       if (e.target.closest('[data-sheet-close]')) { closeSheet(); return; }
-      if (e.target.closest('[data-sheet-clear]')) { state.tag = ''; render(); closeSheet(); return; }
+      if (e.target.closest('[data-sheet-clear]')) {
+        state.tag = ''; state.type = ''; render(); closeSheet(); return;
+      }
       var s = e.target.closest('[data-sort]');
       if (s) { state.sort = s.getAttribute('data-sort'); render(); closeSheet(); return; }
+      var ty = e.target.closest('[data-type]');
+      if (ty) { state.type = ty.getAttribute('data-type'); render(); openSheet('filter'); return; }
       var t = e.target.closest('[data-tag]');
       if (t) { state.tag = t.getAttribute('data-tag'); render(); openSheet('filter'); return; }
     });
@@ -611,6 +694,17 @@
     initCollection();
 
     document.addEventListener('click', function (e) {
+      var row = e.target.closest('.mega__link, .mega__all');
+      if (row) {
+        var item = row.closest('.navitem');
+        if (item) {
+          item.classList.add('is-shut');
+          item.addEventListener('mouseleave', function once() {
+            item.classList.remove('is-shut');
+            item.removeEventListener('mouseleave', once);
+          });
+        }
+      }
       var b = e.target.closest('[data-save]');
       if (!b) return;
       e.preventDefault();

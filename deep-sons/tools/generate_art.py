@@ -226,6 +226,20 @@ def pattern_def(pid, kind, c):
     return wrap(16, 16, '')
 
 
+# what the piece is, independent of which section it sits in
+TYPE_LABEL = {
+    'kurta': 'Kurta',
+    'kurta_jacket': 'Kurta Jacket Set',
+    'sherwani': 'Sherwani',
+    'jodhpuri': 'Jodhpuri',
+    'indowestern': 'Indo-Western',
+    'suit': 'Two-Piece Suit',
+    'shirt': 'Shirt',
+    'bolt': 'Cloth by the Length',
+    'tools': 'In the Workroom',
+    'atelier': 'Made to Measure',
+}
+
 PATTERN_LABEL = {
     'plain': 'Plain weave', 'twill': 'Twill weave', 'pinstripe': 'Pinstripe',
     'herringbone': 'Herringbone', 'windowpane': 'Windowpane check',
@@ -1116,6 +1130,7 @@ def main():
             'img': 'assets/img/%s.svg' % it['id'],
             'fabric': it['fabric'],
             'weave': PATTERN_LABEL.get(it['pattern'], ''),
+            'type': TYPE_LABEL.get(it['garment'], ''),
             'detail': it['detail'],
             'tags': it['tags'],
             'colours': colours[:4],
