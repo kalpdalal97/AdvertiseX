@@ -1105,6 +1105,48 @@ def make_favicon():
             'font-size="30" font-weight="700" fill="#d9b45a">DS</text></svg>')
 
 
+# ------------------------------------------------------------ occasions ---
+# The six occasions the look book filters by. Item tags are written in the
+# shop's own words; this maps them onto that fixed vocabulary, so no chip can
+# lead to an empty grid and no piece falls outside every occasion.
+
+OCCASIONS = ['Ceremony', 'Reception', 'Sangeet', 'Engagement', 'Mehendi', 'Cocktail']
+
+# tags that name an occasion, and so are replaced by the list above
+OCCASION_SOURCE = {'Wedding', 'Reception', 'Sangeet', 'Mehendi', 'Haldi', 'Cocktail'}
+
+DRESSY = ('jodhpuri', 'indowestern', 'suit', 'kurta_jacket')
+DAYTIME_ETHNIC = ('kurta', 'kurta_jacket', 'indowestern')
+
+
+def occasions_for(it):
+    t, g, out = set(it['tags']), it['garment'], []
+
+    def add(name):
+        if name not in out:
+            out.append(name)
+
+    if 'Wedding' in t:
+        add('Ceremony')
+    if 'Reception' in t:
+        add('Reception')
+    if 'Sangeet' in t:
+        add('Sangeet')
+    if g in DRESSY and t & {'Reception', 'Evening', 'Formal', 'Festive'}:
+        add('Engagement')
+    if t & {'Mehendi', 'Haldi'}:
+        add('Mehendi')
+    if t & {'Daytime', 'Festive'} and g in DAYTIME_ETHNIC:
+        add('Mehendi')
+    if 'Cocktail' in t:
+        add('Cocktail')
+    if 'Evening' in t and g in ('indowestern', 'jodhpuri', 'suit', 'sherwani'):
+        add('Cocktail')
+
+    # keep whatever is not an occasion: Cloth, Stitched, Two-Piece, Office ...
+    return out + [x for x in it['tags'] if x not in OCCASION_SOURCE]
+
+
 # ----------------------------------------------------------------- main ----
 
 def main():
@@ -1132,7 +1174,7 @@ def main():
             'weave': PATTERN_LABEL.get(it['pattern'], ''),
             'type': TYPE_LABEL.get(it['garment'], ''),
             'detail': it['detail'],
-            'tags': it['tags'],
+            'tags': occasions_for(it),
             'colours': colours[:4],
             'kid': bool(it.get('kid')),
         })

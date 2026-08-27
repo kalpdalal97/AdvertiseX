@@ -43,6 +43,10 @@
     { key: 'about', label: 'About Us', href: 'about.html' }
   ];
 
+  // the six occasions the look book filters by, in the order they read
+  var OCCASIONS = ['Ceremony', 'Reception', 'Sangeet', 'Engagement',
+    'Mehendi', 'Cocktail'];
+
   var SORTS = [
     ['picked', 'Hand-picked'],
     ['az', 'Name: A to Z'],
@@ -224,7 +228,7 @@
 
   function buildDrawer() {
     if (document.querySelector('.drawer')) return;
-    var occasions = ['Wedding', 'Reception', 'Sangeet', 'Mehendi', 'Formal', 'Office', 'Daytime', 'Evening'];
+    var occasions = OCCASIONS;
     var html =
       '<div class="scrim" data-close-drawer></div>' +
       '<aside class="drawer" id="drawer" aria-label="Main menu" aria-hidden="true">' +
@@ -505,10 +509,6 @@
   }
 
   /* -------------------------------------------------------- lookbook page -- */
-
-  // occasions worth filtering a look book by, in the order they read
-  var OCCASIONS = ['Wedding', 'Reception', 'Sangeet', 'Mehendi', 'Haldi',
-    'Cocktail', 'Festive', 'Formal', 'Daytime', 'Evening'];
 
   function initLookbook() {
     var grid = document.querySelector('[data-lookbook]');
