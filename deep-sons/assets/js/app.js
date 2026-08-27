@@ -487,32 +487,7 @@
       }).join('');
     });
 
-    var book = document.querySelector('[data-lookbook]');
-    if (book) {
-      var bySection = {}, order = [];
-      ITEMS.forEach(function (i) {
-        if (isWide(i)) return;
-        if (!bySection[i.section]) { bySection[i.section] = []; order.push(i.section); }
-        bySection[i.section].push(i);
-      });
-      var shots = [], left = true;
-      for (var pass = 0; left; pass++) {
-        left = false;
-        for (var k = 0; k < order.length; k++) {
-          var q = bySection[order[k]];
-          if (pass < q.length) { shots.push(q[pass]); left = true; }
-        }
-      }
-      book.innerHTML = shots.map(function (i) {
-        return '<a class="shot" href="#" data-open="' + i.id + '">' +
-          '<img src="' + artSrc(i) + '" alt="' + esc(i.title) + '" loading="lazy">' +
-          '</a>';
-      }).join('');
-      book.addEventListener('click', function (e) {
-        var a = e.target.closest('[data-open]');
-        if (a) { e.preventDefault(); openLb(shots, a.getAttribute('data-open')); }
-      });
-    }
+    initLookbook();
 
     var strip = document.querySelector('[data-strip]');
     if (strip) {
@@ -527,6 +502,91 @@
         if (a) { e.preventDefault(); openLb(list, a.getAttribute('data-open')); }
       });
     }
+  }
+
+  /* -------------------------------------------------------- lookbook page -- */
+
+  // occasions worth filtering a look book by, in the order they read
+  var OCCASIONS = ['Wedding', 'Reception', 'Sangeet', 'Mehendi', 'Haldi',
+    'Cocktail', 'Festive', 'Formal', 'Daytime', 'Evening'];
+
+  function initLookbook() {
+    var grid = document.querySelector('[data-lookbook]');
+    if (!grid) return;
+
+    // deal the pictures round-robin across sections so the page does not open
+    // on four fabric bolts in a row
+    var bySection = {}, order = [];
+    ITEMS.forEach(function (i) {
+      if (isWide(i)) return;
+      if (!bySection[i.section]) { bySection[i.section] = []; order.push(i.section); }
+      bySection[i.section].push(i);
+    });
+    var all = [], left = true;
+    for (var pass = 0; left; pass++) {
+      left = false;
+      for (var k = 0; k < order.length; k++) {
+        var q = bySection[order[k]];
+        if (pass < q.length) { all.push(q[pass]); left = true; }
+      }
+    }
+
+    var chipEl = document.querySelector('[data-book-chips]');
+    var countEl = document.querySelector('[data-book-count]');
+    var clearEl = document.querySelector('[data-book-clear]');
+    var picked = [], cols = 3, shown = all;
+
+    var offered = OCCASIONS.filter(function (t) {
+      return all.some(function (i) { return i.tags.indexOf(t) > -1; });
+    });
+
+    function visible() {
+      if (!picked.length) return all;
+      return all.filter(function (i) {
+        return picked.some(function (t) { return i.tags.indexOf(t) > -1; });
+      });
+    }
+
+    function paint() {
+      shown = visible();
+      if (chipEl) {
+        chipEl.innerHTML = offered.map(function (t) {
+          return '<button class="chip' + (picked.indexOf(t) > -1 ? ' is-on' : '') +
+            '" data-book-tag="' + esc(t) + '">' + esc(t) + '</button>';
+        }).join('');
+      }
+      if (clearEl) clearEl.hidden = picked.length === 0;
+      if (countEl) countEl.textContent = shown.length + (shown.length === 1 ? ' piece' : ' pieces');
+      grid.className = 'lookbook is-' + cols;
+      grid.innerHTML = shown.length
+        ? shown.map(function (i) {
+            return '<figure class="shot">' +
+              '<a href="#" data-open="' + i.id + '">' +
+              '<img src="' + artSrc(i) + '" alt="' + esc(i.title) + '" loading="lazy">' +
+              '</a><figcaption>' + esc(i.title) + '</figcaption></figure>';
+          }).join('')
+        : '<p class="lookbook__empty">Nothing for that occasion yet — try another.</p>';
+      [].forEach.call(document.querySelectorAll('[data-book-view]'), function (b) {
+        b.classList.toggle('is-on', +b.getAttribute('data-book-view') === cols);
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      var chip = e.target.closest('[data-book-tag]');
+      if (chip) {
+        var t = chip.getAttribute('data-book-tag'), at = picked.indexOf(t);
+        if (at > -1) picked.splice(at, 1); else picked.push(t);
+        paint();
+        return;
+      }
+      if (e.target.closest('[data-book-clear]')) { picked = []; paint(); return; }
+      var v = e.target.closest('[data-book-view]');
+      if (v) { cols = +v.getAttribute('data-book-view'); paint(); return; }
+      var open = e.target.closest('[data-lookbook] [data-open]');
+      if (open) { e.preventDefault(); openLb(shown, open.getAttribute('data-open')); }
+    });
+
+    paint();
   }
 
   /* ------------------------------------------------------ collection page -- */

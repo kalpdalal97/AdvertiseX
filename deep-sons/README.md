@@ -6,8 +6,7 @@ prices, MSRPs or currency figures appear anywhere on the site.
 
 ## Pages
 
-`index.html` (Home), `men.html` (Men), `lookbook.html` (Lookbook — pictures
-only), `about.html` (About Us), and `collection.html` for every section.
+`index.html` (Home), `men.html` (Men), `lookbook.html` (Lookbook), `about.html` (About Us), and `collection.html` for every section.
 
 ## Sections
 
@@ -123,7 +122,7 @@ Pages, or ordinary shared hosting).
 ```
 index.html            home
 men.html              the men's sections
-lookbook.html         pictures only, no captions
+lookbook.html         the picture book: occasion chips + names, no prices
 collection.html       every section, driven by ?c=<section>
 about.html            who we are, address, hours, what to expect
 assets/css/style.css  the whole stylesheet
