@@ -377,11 +377,10 @@
   function navTarget(route) {
     if (route === 'men' || route === 'about' || route === 'lookbook') return route;
     if (route.indexOf('c=') === 0) {
-      var c = route.slice(2).split('&')[0];
-      if (c === 'kids') return 'kids';
-      if (c === 'all' || c === 'saved') return 'lookbook';
-      var sec = sectionById(c);
-      if (!sec) return 'lookbook';
+      var sec = sectionById(route.slice(2).split('&')[0]);
+      // "everything we make" and saved looks have no nav item of their own —
+      // they hang off Home, which is where they are reached from
+      if (!sec) return 'home';
       return sec.group === 'kids' ? 'kids' : 'men';
     }
     return 'home';
