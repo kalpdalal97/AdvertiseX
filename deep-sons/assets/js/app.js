@@ -35,11 +35,11 @@
   };
 
   var NAV = [
-    { label: 'Home', href: 'index.html', match: ['index.html', ''] },
-    { label: 'Men', href: 'men.html', match: ['men.html'] },
-    { label: 'Kids', href: 'collection.html?c=kids', match: [] },
-    { label: 'Lookbook', href: 'collection.html?c=all', match: [] },
-    { label: 'About Us', href: 'about.html', match: ['about.html'] }
+    { key: 'home', label: 'Home', href: 'index.html' },
+    { key: 'men', label: 'Men', href: 'men.html' },
+    { key: 'kids', label: 'Kids', href: 'collection.html?c=kids' },
+    { key: 'lookbook', label: 'Lookbook', href: 'collection.html?c=all' },
+    { key: 'about', label: 'About Us', href: 'about.html' }
   ];
 
   var SORTS = [
@@ -127,10 +127,8 @@
   function buildHeader() {
     var host = document.querySelector('[data-header]');
     if (!host) return;
-    var here = (location.pathname.split('/').pop() || 'index.html');
     var links = NAV.map(function (n) {
-      var cur = n.match.indexOf(here) > -1 ? ' aria-current="page"' : '';
-      return '<a href="' + n.href + '"' + cur + '>' + esc(n.label) + '</a>';
+      return '<a href="' + n.href + '" data-nav="' + n.key + '">' + esc(n.label) + '</a>';
     }).join('');
     host.innerHTML =
       '<div class="head__in">' +
@@ -143,6 +141,7 @@
         '<a class="icon-btn" href="collection.html?c=saved" aria-label="Saved looks">' +
           svg('heart') + '<b class="head__count" data-saved-count hidden>0</b></a>' +
       '</div>';
+    markNav();
   }
 
   function buildDrawer() {
@@ -274,6 +273,39 @@
          will not update, so deep links are the only thing lost */
     }
   }
+
+  function currentRoute() {
+    var file = (location.pathname.split('/').pop() || 'index.html');
+    if (file === 'men.html') return 'men';
+    if (file === 'about.html') return 'about';
+    if (file === 'collection.html') return 'c=' + (readQuery().get('c') || 'all');
+    return '';
+  }
+
+  /* Which top-level nav item owns a route. A section page belongs to the
+     range it sits in, so browsing Sherwani keeps Men lit. */
+  function navTarget(route) {
+    if (route === 'men' || route === 'about') return route;
+    if (route.indexOf('c=') === 0) {
+      var c = route.slice(2).split('&')[0];
+      if (c === 'kids') return 'kids';
+      if (c === 'all' || c === 'saved') return 'lookbook';
+      var sec = sectionById(c);
+      if (!sec) return 'lookbook';
+      return sec.group === 'kids' ? 'kids' : 'men';
+    }
+    return 'home';
+  }
+
+  function markNav(route) {
+    var want = navTarget(route == null ? currentRoute() : route);
+    [].forEach.call(document.querySelectorAll('.head__nav a'), function (a) {
+      if (a.getAttribute('data-nav') === want) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+
+  window.DS_MARK_NAV = markNav;
 
   /* ------------------------------------------------------------- lightbox -- */
 

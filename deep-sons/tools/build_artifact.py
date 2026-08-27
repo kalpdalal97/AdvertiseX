@@ -80,23 +80,18 @@ def sub1(text, old, new, what):
 def patch_app(js):
     """Rewrite app.js for a single page: hash routing and inline artwork."""
 
-    # 1. the header marks the current page by route name, not filename
-    js = sub1(js, "var here = (location.pathname.split('/').pop() || 'index.html');",
-              "var here = location.hash.replace(/^#/, '');", 'current-page marker')
+    # 1. the route is read off the hash, not the filename
+    js = sub1(js, """  function currentRoute() {
+    var file = (location.pathname.split('/').pop() || 'index.html');
+    if (file === 'men.html') return 'men';
+    if (file === 'about.html') return 'about';
+    if (file === 'collection.html') return 'c=' + (readQuery().get('c') || 'all');
+    return '';
+  }""", """  function currentRoute() {
+    return location.hash.replace(/^#/, '');
+  }""", 'route reader')
 
-    # 2. the nav addresses hash routes
-    nav = js[js.index('  var NAV = ['):js.index('  var SORTS = [')]
-    js = sub1(js, nav, """  var NAV = [
-    { label: 'Home', href: '#', match: [''] },
-    { label: 'Men', href: '#men', match: ['men'] },
-    { label: 'Kids', href: '#c=kids', match: [] },
-    { label: 'Lookbook', href: '#c=all', match: [] },
-    { label: 'About Us', href: '#about', match: ['about'] }
-  ];
-
-""", 'nav links')
-
-    # 3. every remaining file path becomes a hash route
+    # 2. every file path becomes a hash route
     js = js.replace('collection.html?c=', '#c=')
     js = js.replace('visit.html', '#about')
     js = js.replace('about.html', '#about')
@@ -104,7 +99,7 @@ def patch_app(js):
     js = js.replace('index.html', '#')
     assert '.html' not in js, 'stray page link left in app.js'
 
-    # 4. artwork comes from the inline map rather than a file path
+    # 3. artwork comes from the inline map rather than a file path
     js = sub1(js, "  function esc(s) {",
               "  var ART_CACHE = {};\n"
               "  function art(id) {\n"
@@ -122,7 +117,7 @@ def patch_app(js):
     js = sub1(js, "'<img src=\"' + cover.img + '\"", "'<img src=\"' + art(cover.id) + '\"",
               'section cover artwork')
 
-    # 5. collection state lives in the hash, and is only ever written back
+    # 4. collection state lives in the hash, and is only ever written back
     #    onto a hash that is already a collection route -- otherwise the
     #    first render on the home page would navigate away from it
     js = sub1(js, """  function readQuery() {
@@ -187,6 +182,7 @@ ROUTER = """
     } else {
       document.title = TITLES[name] || TITLES.home;
     }
+    if (window.DS_MARK_NAV) window.DS_MARK_NAV(route);
     window.scrollTo(0, 0);
   }
 
