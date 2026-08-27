@@ -13,6 +13,7 @@
     phone: '',
     whatsapp: '',
     email: '',
+    instagram: 'https://www.instagram.com/deep.sons/',
     mapsUrl: 'https://maps.app.goo.gl/EVc7AHxfjvW4ctP49?g_st=ic',
     hours: [
       ['Monday – Saturday', '10:00 am – 8:30 pm'],
@@ -38,7 +39,7 @@
     { key: 'home', label: 'Home', href: 'index.html' },
     { key: 'men', label: 'Men', href: 'men.html', menu: 'men' },
     { key: 'kids', label: 'Kids', href: 'collection.html?c=kids', menu: 'kids' },
-    { key: 'lookbook', label: 'Lookbook', href: 'collection.html?c=all' },
+    { key: 'lookbook', label: 'Lookbook', href: 'lookbook.html' },
     { key: 'about', label: 'About Us', href: 'about.html' }
   ];
 
@@ -60,7 +61,9 @@
     grid2: '<rect x="3" y="4" width="8" height="16" rx="1"/><rect x="13" y="4" width="8" height="16" rx="1"/>',
     left: '<path d="M15 5l-7 7 7 7"/>',
     right: '<path d="M9 5l7 7-7 7"/>',
-    pin: '<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>'
+    pin: '<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+    insta: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/>' +
+      '<circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/>'
   };
 
   function svg(name, cls) {
@@ -189,10 +192,15 @@
       '<div class="head__in">' +
         '<button class="icon-btn head__burger" data-open-drawer aria-label="Open menu">' + svg('burger') + '</button>' +
         '<a class="brand" href="index.html">' +
-          '<img src="assets/img/logo.svg" alt="" width="34" height="34">' +
-          '<b>' + esc(CONFIG.name) + '</b><small>' + esc(CONFIG.since) + '</small>' +
+          '<img src="assets/img/logo-mark.png" alt="" width="39" height="34">' +
+          '<span class="brand__txt"><b>' + esc(CONFIG.name) + '</b>' +
+          '<small>' + esc(CONFIG.since) + '</small></span>' +
         '</a>' +
         '<nav class="head__nav">' + links + '</nav>' +
+        (CONFIG.instagram
+          ? '<a class="icon-btn" href="' + esc(CONFIG.instagram) + '" target="_blank" ' +
+            'rel="noopener" aria-label="Deep Sons on Instagram">' + svg('insta') + '</a>'
+          : '') +
         '<a class="icon-btn" href="collection.html?c=saved" aria-label="Saved looks">' +
           svg('heart') + '<b class="head__count" data-saved-count hidden>0</b></a>' +
       '</div>';
@@ -234,6 +242,7 @@
             return '<a class="is-lead" href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a>';
           }).join('') +
           '<h4>Lookbook</h4>' +
+          '<a href="lookbook.html">The picture book</a>' +
           '<a href="collection.html?c=all">Everything we make</a>' +
           '<h4>Shop by occasion</h4>' +
           occasions.map(function (t) {
@@ -243,6 +252,8 @@
           '<a href="about.html">About us</a>' +
           '<a href="collection.html?c=tailoring">Customized tailoring</a>' +
           '<a href="collection.html?c=saved">Saved looks</a>' +
+          (CONFIG.instagram ? '<a href="' + esc(CONFIG.instagram) + '" target="_blank" ' +
+            'rel="noopener">Instagram &nearr;</a>' : '') +
           '<div class="drawer__note">This is a look-book, not a shop. Nothing here is ' +
           'priced or sold online — come in and we will show you the cloth, take your ' +
           'measurements and talk it through.</div>' +
@@ -274,9 +285,12 @@
     if (CONFIG.phone) contact.push('<li><a href="tel:' + esc(CONFIG.phone.replace(/\s/g, '')) + '">' + esc(CONFIG.phone) + '</a></li>');
     if (CONFIG.whatsapp) contact.push('<li><a href="https://wa.me/' + esc(CONFIG.whatsapp) + '">WhatsApp</a></li>');
     if (CONFIG.email) contact.push('<li><a href="mailto:' + esc(CONFIG.email) + '">' + esc(CONFIG.email) + '</a></li>');
+    if (CONFIG.instagram) contact.push('<li><a href="' + esc(CONFIG.instagram) +
+      '" target="_blank" rel="noopener">Instagram &nearr;</a></li>');
     host.innerHTML =
       '<div class="wrap"><div class="foot__grid">' +
-        '<div><div class="foot__brand">' + esc(CONFIG.name) + '</div>' +
+        '<div><img class="foot__logo" src="assets/img/logo-full.png" alt="' +
+          esc(CONFIG.name) + '" width="190">' +
           '<p>' + esc(CONFIG.tagline) + '. Cloth chosen by hand, cut on our own table ' +
           'and finished to your measurements.</p>' +
           '<p><a href="' + esc(CONFIG.mapsUrl) + '" target="_blank" rel="noopener">' +
@@ -285,6 +299,7 @@
           SECTIONS.map(function (s) {
             return '<li><a href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a></li>';
           }).join('') +
+          '<li><a href="lookbook.html">Lookbook</a></li>' +
           '<li><a href="collection.html?c=all">Everything we make</a></li>' +
           '<li><a href="about.html">About us</a></li></ul></div>' +
         '<div><h5>The shop</h5><p>' + addr + '</p><ul>' + contact.join('') + '</ul>' +
@@ -348,6 +363,7 @@
     var file = (location.pathname.split('/').pop() || 'index.html');
     if (file === 'men.html') return 'men';
     if (file === 'about.html') return 'about';
+    if (file === 'lookbook.html') return 'lookbook';
     if (file === 'collection.html') return 'c=' + (readQuery().get('c') || 'all');
     return '';
   }
@@ -355,7 +371,7 @@
   /* Which top-level nav item owns a route. A section page belongs to the
      range it sits in, so browsing Sherwani keeps Men lit. */
   function navTarget(route) {
-    if (route === 'men' || route === 'about') return route;
+    if (route === 'men' || route === 'about' || route === 'lookbook') return route;
     if (route.indexOf('c=') === 0) {
       var c = route.slice(2).split('&')[0];
       if (c === 'kids') return 'kids';
@@ -470,6 +486,33 @@
           '<p>' + esc(s.blurb) + '</p></div></a>';
       }).join('');
     });
+
+    var book = document.querySelector('[data-lookbook]');
+    if (book) {
+      var bySection = {}, order = [];
+      ITEMS.forEach(function (i) {
+        if (isWide(i)) return;
+        if (!bySection[i.section]) { bySection[i.section] = []; order.push(i.section); }
+        bySection[i.section].push(i);
+      });
+      var shots = [], left = true;
+      for (var pass = 0; left; pass++) {
+        left = false;
+        for (var k = 0; k < order.length; k++) {
+          var q = bySection[order[k]];
+          if (pass < q.length) { shots.push(q[pass]); left = true; }
+        }
+      }
+      book.innerHTML = shots.map(function (i) {
+        return '<a class="shot" href="#" data-open="' + i.id + '">' +
+          '<img src="' + artSrc(i) + '" alt="' + esc(i.title) + '" loading="lazy">' +
+          '</a>';
+      }).join('');
+      book.addEventListener('click', function (e) {
+        var a = e.target.closest('[data-open]');
+        if (a) { e.preventDefault(); openLb(shots, a.getAttribute('data-open')); }
+      });
+    }
 
     var strip = document.querySelector('[data-strip]');
     if (strip) {

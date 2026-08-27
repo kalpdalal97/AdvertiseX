@@ -64,6 +64,7 @@ def relink(html):
     html = html.replace('href="visit.html"', 'href="#about"')
     html = html.replace('href="about.html"', 'href="#about"')
     html = html.replace('href="men.html"', 'href="#men"')
+    html = html.replace('href="lookbook.html"', 'href="#lookbook"')
     html = html.replace('href="index.html"', 'href="#"')
     return html
 
@@ -85,6 +86,7 @@ def patch_app(js):
     var file = (location.pathname.split('/').pop() || 'index.html');
     if (file === 'men.html') return 'men';
     if (file === 'about.html') return 'about';
+    if (file === 'lookbook.html') return 'lookbook';
     if (file === 'collection.html') return 'c=' + (readQuery().get('c') || 'all');
     return '';
   }""", """  function currentRoute() {
@@ -96,6 +98,7 @@ def patch_app(js):
     js = js.replace('visit.html', '#about')
     js = js.replace('about.html', '#about')
     js = js.replace('men.html', '#men')
+    js = js.replace('lookbook.html', '#lookbook')
     js = js.replace('index.html', '#')
     assert '.html' not in js, 'stray page link left in app.js'
 
@@ -142,6 +145,7 @@ ROUTER = """
   var TITLES = {
     home: 'Deep Sons \\u2014 Suiting, Shirting & Wedding Wear',
     men: 'Men \\u2014 Deep Sons',
+    lookbook: 'Lookbook \\u2014 Deep Sons',
     about: 'About Us \\u2014 Deep Sons'
   };
 
@@ -232,6 +236,7 @@ def main():
     pages = [
         ('home', relink(body_of('index.html'))),
         ('men', relink(body_of('men.html'))),
+        ('lookbook', relink(body_of('lookbook.html'))),
         ('coll', relink(body_of('collection.html'))),
         ('about', relink(body_of('about.html'))),
     ]

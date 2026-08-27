@@ -115,6 +115,8 @@
     if (C.phone) rows += '<dt>Phone</dt><dd><a href="tel:' + C.phone.replace(/\s/g, '') + '">' + C.phone + '</a></dd>';
     if (C.whatsapp) rows += '<dt>WhatsApp</dt><dd><a href="https://wa.me/' + C.whatsapp + '">Message us</a></dd>';
     if (C.email) rows += '<dt>Email</dt><dd><a href="mailto:' + C.email + '">' + C.email + '</a></dd>';
+    if (C.instagram) rows += '<dt>Instagram</dt><dd><a href="' + C.instagram +
+      '" target="_blank" rel="noopener">@deep.sons \u2197</a></dd>';
     a.innerHTML = rows;
   }
   var h = document.querySelector('[data-hours]');
