@@ -159,6 +159,7 @@
           SECTIONS.filter(function (s) { return s.group === 'men'; }).map(function (s) {
             return '<a class="is-lead" href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a>';
           }).join('') +
+          '<a href="men.html">All menswear</a>' +
           '<h4>Kids</h4>' +
           SECTIONS.filter(function (s) { return s.group === 'kids'; }).map(function (s) {
             return '<a class="is-lead" href="collection.html?c=' + s.id + '">' + esc(s.name) + '</a>';
@@ -253,6 +254,25 @@
         '<p class="card__meta">' + esc(item.fabric) + (item.weave ? ' &middot; ' + esc(item.weave) : '') + '</p>' +
         dotsHtml(item) +
       '</div></article>';
+  }
+
+  /* ---------------------------------------------------------------- route --
+     The multi-page site keeps collection state in the query string. The
+     single-file build swaps these two for hash equivalents.               */
+
+  function readQuery() {
+    return new URLSearchParams(location.search);
+  }
+
+  function writeQuery(p) {
+    try {
+      var u = new URL(location.href);
+      u.search = p.toString();
+      history.replaceState(null, '', u);
+    } catch (e) {
+      /* opaque origin (a sandboxed frame): the view is right, the URL just
+         will not update, so deep links are the only thing lost */
+    }
   }
 
   /* ------------------------------------------------------------- lightbox -- */
@@ -370,7 +390,7 @@
     var root = document.querySelector('[data-collection]');
     if (!root) return;
 
-    var qs = new URLSearchParams(location.search);
+    var qs = readQuery();
     var state = {
       c: qs.get('c') || 'all',
       tag: qs.get('tag') || '',
@@ -462,13 +482,23 @@
     }
 
     function sync() {
-      var u = new URL(location.href);
-      u.searchParams.set('c', state.c);
-      state.tag ? u.searchParams.set('tag', state.tag) : u.searchParams.delete('tag');
-      history.replaceState(null, '', u);
+      var p = new URLSearchParams();
+      p.set('c', state.c);
+      if (state.tag) p.set('tag', state.tag);
+      writeQuery(p);
     }
 
     function render() { paintHead(); paintChips(); paintGrid(); paintBar(); sync(); }
+
+    // re-point an already-built collection at a new route without rebuilding
+    // it; used by the single-file build's router
+    root.__applyRoute = function (params) {
+      var q = params || readQuery();
+      state.c = q.get('c') || 'all';
+      state.tag = q.get('tag') || '';
+      render();
+    };
+
     render();
 
     root.addEventListener('click', function (e) {

@@ -68,19 +68,25 @@ def relink(html):
     return html
 
 
+def sub1(text, old, new, what):
+    """Replace and prove it happened. A silent no-op here ships a broken
+    build, so every rewrite below is checked."""
+    if old not in text:
+        raise SystemExit('build_artifact: could not patch %s -- app.js has '
+                         'changed under this script' % what)
+    return text.replace(old, new)
+
+
 def patch_app(js):
     """Rewrite app.js for a single page: hash routing and inline artwork."""
 
-    # 1. the header no longer has a filename to mark the current page by
-    #    (do these before the blanket path rewrite below)
-    before = js
-    js = js.replace("var here = (location.pathname.split('/').pop() || 'index.html');",
-                    "var here = location.hash.replace(/^#/, '');")
-    assert js != before, 'header current-page patch did not apply'
+    # 1. the header marks the current page by route name, not filename
+    js = sub1(js, "var here = (location.pathname.split('/').pop() || 'index.html');",
+              "var here = location.hash.replace(/^#/, '');", 'current-page marker')
 
-    # the nav addresses hash routes, and marks the current one by route name
+    # 2. the nav addresses hash routes
     nav = js[js.index('  var NAV = ['):js.index('  var SORTS = [')]
-    js = js.replace(nav, """  var NAV = [
+    js = sub1(js, nav, """  var NAV = [
     { label: 'Home', href: '#', match: [''] },
     { label: 'Men', href: '#men', match: ['men'] },
     { label: 'Kids', href: '#c=kids', match: [] },
@@ -88,73 +94,60 @@ def patch_app(js):
     { label: 'About Us', href: '#about', match: ['about'] }
   ];
 
-""")
+""", 'nav links')
 
-    # 2. every remaining file path becomes a hash route
+    # 3. every remaining file path becomes a hash route
     js = js.replace('collection.html?c=', '#c=')
     js = js.replace('visit.html', '#about')
     js = js.replace('about.html', '#about')
     js = js.replace('men.html', '#men')
     js = js.replace('index.html', '#')
-    assert 'collection.html' not in js and '.html' not in js, 'stray page link left in app.js' 
+    assert '.html' not in js, 'stray page link left in app.js'
 
-    # 3. artwork comes from the inline map rather than a file path
-    js = js.replace(
-        "  function esc(s) {",
-        "  var ART_CACHE = {};\n"
-        "  function art(id) {\n"
-        "    if (!ART_CACHE[id]) {\n"
-        "      var raw = (window.DS_ART || {})[id];\n"
-        "      ART_CACHE[id] = raw ? 'data:image/svg+xml,' + encodeURIComponent(raw) : '';\n"
-        "    }\n"
-        "    return ART_CACHE[id];\n"
-        "  }\n\n"
-        "  function esc(s) {")
-    js = js.replace("'<img src=\"' + item.img + '\"", "'<img src=\"' + art(item.id) + '\"")
-    js = js.replace("lb.node.querySelector('[data-lb-img]').src = it.img;",
-                    "lb.node.querySelector('[data-lb-img]').src = art(it.id);")
-    js = js.replace("'<img src=\"' + cover.img + '\"", "'<img src=\"' + art(cover.id) + '\"")
+    # 4. artwork comes from the inline map rather than a file path
+    js = sub1(js, "  function esc(s) {",
+              "  var ART_CACHE = {};\n"
+              "  function art(id) {\n"
+              "    if (!ART_CACHE[id]) {\n"
+              "      var raw = (window.DS_ART || {})[id];\n"
+              "      ART_CACHE[id] = raw ? 'data:image/svg+xml,' + encodeURIComponent(raw) : '';\n"
+              "    }\n"
+              "    return ART_CACHE[id];\n"
+              "  }\n\n"
+              "  function esc(s) {", 'artwork lookup')
+    js = sub1(js, "'<img src=\"' + item.img + '\"", "'<img src=\"' + art(item.id) + '\"",
+              'card artwork')
+    js = sub1(js, "lb.node.querySelector('[data-lb-img]').src = it.img;",
+              "lb.node.querySelector('[data-lb-img]').src = art(it.id);", 'viewer artwork')
+    js = sub1(js, "'<img src=\"' + cover.img + '\"", "'<img src=\"' + art(cover.id) + '\"",
+              'section cover artwork')
 
-    # 4. state is read from, and written back to, the hash
-    js = js.replace("    var qs = new URLSearchParams(location.search);",
-                    "    var qs = new URLSearchParams(location.hash.replace(/^#/, ''));")
-    js = js.replace(
-        """    function sync() {
+    # 5. collection state lives in the hash, and is only ever written back
+    #    onto a hash that is already a collection route -- otherwise the
+    #    first render on the home page would navigate away from it
+    js = sub1(js, """  function readQuery() {
+    return new URLSearchParams(location.search);
+  }""", """  function readQuery() {
+    return new URLSearchParams(location.hash.replace(/^#/, ''));
+  }""", 'query reader')
+    js = sub1(js, """    try {
       var u = new URL(location.href);
-      u.searchParams.set('c', state.c);
-      state.colour ? u.searchParams.set('colour', state.colour) : u.searchParams.delete('colour');
-      state.tag ? u.searchParams.set('tag', state.tag) : u.searchParams.delete('tag');
+      u.search = p.toString();
       history.replaceState(null, '', u);
-    }""",
-        """    function sync() {
-      // only ever rewrite a hash that is already a collection route, so the
-      // initial render on the home page does not navigate away from it
-      if (location.hash.replace(/^#/, '').indexOf('c=') !== 0) return;
-      var p = new URLSearchParams();
-      p.set('c', state.c);
-      if (state.colour) p.set('colour', state.colour);
-      if (state.tag) p.set('tag', state.tag);
+    } catch (e) {""", """    if (location.hash.replace(/^#/, '').indexOf('c=') !== 0) return;
+    try {
       history.replaceState(null, '', '#' + p.toString());
-    }""")
-
-    # 5. let the router re-point the collection without rebuilding it
-    js = js.replace(
-        "    function render() { paintHead(); paintRail(); paintChips(); paintGrid(); paintBar(); sync(); }\n    render();",
-        """    function render() { paintHead(); paintRail(); paintChips(); paintGrid(); paintBar(); sync(); }
-    root.__applyHash = function () {
-      var q = new URLSearchParams(location.hash.replace(/^#/, ''));
-      state.c = q.get('c') || 'all';
-      state.colour = q.get('colour') || '';
-      state.tag = q.get('tag') || '';
-      render();
-    };
-    render();""")
+    } catch (e) {""", 'query writer')
 
     return js
 
 
 ROUTER = """
-/* ------------------------------------------------- single-page routing -- */
+/* ------------------------------------------------- single-page routing --
+   Navigation is driven by the click, not by the hash. The hash is still
+   updated so deep links and the back button work, but nothing depends on
+   it: in a sandboxed frame the History API can be unavailable, and the
+   site has to keep working there.                                        */
 (function () {
   'use strict';
   var TITLES = {
@@ -162,14 +155,16 @@ ROUTER = """
     men: 'Men \\u2014 Deep Sons',
     about: 'About Us \\u2014 Deep Sons'
   };
-  var pages = {};
-  [].forEach.call(document.querySelectorAll('[data-page]'), function (n) {
-    pages[n.getAttribute('data-page')] = n;
-  });
+
+  function pages() {
+    var out = {};
+    [].forEach.call(document.querySelectorAll('[data-page]'), function (n) {
+      out[n.getAttribute('data-page')] = n;
+    });
+    return out;
+  }
 
   function dismissOverlays() {
-    // a hash link inside the menu, the filter sheet or the viewer navigates
-    // without a page load, so close whatever is covering the content
     var drawer = document.querySelector('.drawer');
     if (drawer) { drawer.classList.remove('is-on'); drawer.setAttribute('aria-hidden', 'true'); }
     var sheet = document.querySelector('.sheet');
@@ -180,26 +175,50 @@ ROUTER = """
     document.body.classList.remove('is-locked');
   }
 
-  function route() {
+  function apply(route) {
+    var map = pages();
+    var name = route.indexOf('c=') === 0 ? 'coll' : (map[route] ? route : 'home');
     dismissOverlays();
-    var h = location.hash.replace(/^#/, '');
-    var name = h.indexOf('c=') === 0 ? 'coll' : (pages[h] ? h : 'home');
-    for (var k in pages) pages[k].hidden = k !== name;
+    for (var k in map) map[k].hidden = k !== name;
     document.body.classList.toggle('has-bar', name === 'coll');
     if (name === 'coll') {
       var root = document.querySelector('[data-collection]');
-      if (root && root.__applyHash) root.__applyHash();
+      if (root && root.__applyRoute) root.__applyRoute(new URLSearchParams(route));
     } else {
       document.title = TITLES[name] || TITLES.home;
     }
     window.scrollTo(0, 0);
   }
 
-  window.addEventListener('hashchange', route);
-  // app.js boots on DOMContentLoaded; route after it so the title it sets for a
-  // collection does not overwrite the one this router sets for home or visit.
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', route);
-  else route();
+  function go(route) {
+    apply(route);
+    // best effort: keeps the address bar honest where it is allowed
+    try {
+      if (location.hash.replace(/^#/, '') !== route) location.hash = route;
+    } catch (e) { /* sandboxed frame */ }
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a || a.hasAttribute('data-open')) return;
+    e.preventDefault();
+    go(a.getAttribute('href').slice(1));
+  });
+
+  window.addEventListener('hashchange', function () {
+    apply(location.hash.replace(/^#/, ''));
+  });
+
+  function start() {
+    var h = '';
+    try { h = location.hash.replace(/^#/, ''); } catch (e) { /* sandboxed frame */ }
+    apply(h);
+  }
+
+  // app.js boots on DOMContentLoaded; route after it so the title it sets for
+  // a collection is not overwritten by the one this router sets for home.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();
 """
 
