@@ -300,6 +300,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
   background: var(--paper); white-space: nowrap;
 }
 .chip.is-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.chip--clear { border-color: transparent; color: var(--ink-3); text-decoration: underline;
+  text-underline-offset: 3px; }
+.chip--clear:hover { color: var(--maroon); }
 
 /* ------------------------------------------------------------ bottom bar -- */
 
@@ -491,77 +494,27 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height
 
 /* ------------------------------------------------------------- lookbook -- */
 
-.bookhead { padding: 44px 0 26px; text-align: center; }
+.bookhead { padding: 44px 0 28px; text-align: center; }
 .bookhead h1 { font-size: clamp(30px, 7vw, 46px); }
 .bookhead p { max-width: 46ch; margin: 12px auto 0; color: var(--ink-2); font-size: 15px; }
 
-.bookbar { border-block: 1px solid var(--line); background: var(--paper); }
-.bookbar__in {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 18px; flex-wrap: wrap;
-}
-.bookbar__chips { display: flex; gap: 8px; flex-wrap: wrap; flex: 1 1 auto; }
-.bookbar__chips .chip { flex: none; }
-
-.bookbar__clear {
-  font-size: 13px; color: var(--ink-2); border-bottom: 1px solid var(--line);
-  padding-bottom: 2px; flex: none;
-}
-.bookbar__clear:hover { color: var(--maroon); border-color: currentColor; }
-.bookbar__clear[hidden] { display: none; }
-
-.bookbar__count {
-  font-size: 12.5px; color: var(--ink-3); flex: none;
-  font-variant-numeric: tabular-nums;
-}
-
-.bookbar__views { display: none; gap: 4px; flex: none; }
-@media (min-width: 900px) { .bookbar__views { display: flex; } }
-.bookbar__view {
-  width: 34px; height: 34px; display: grid; place-items: center;
-  border: 1px solid transparent; border-radius: 3px;
-}
-.bookbar__view svg { width: 17px; height: 17px; fill: none; stroke: var(--ink-3); stroke-width: 1.5; }
-.bookbar__view.is-on { border-color: var(--line); background: var(--paper-2); }
-.bookbar__view.is-on svg { stroke: var(--ink); }
-
 .lookbook {
-  display: grid; gap: 22px 12px;
+  display: grid; gap: 4px;
   grid-template-columns: repeat(2, 1fr);
-  padding: 26px 12px 8px;
+  padding: 0 4px;
 }
-@media (min-width: 700px) {
-  .lookbook { gap: 30px 18px; padding: 32px 18px 8px; }
-  .lookbook.is-3 { grid-template-columns: repeat(3, 1fr); }
-  .lookbook.is-5 { grid-template-columns: repeat(4, 1fr); }
-}
-@media (min-width: 1100px) {
-  .lookbook.is-5 { grid-template-columns: repeat(5, 1fr); }
-}
+@media (min-width: 700px) { .lookbook { grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 6px; } }
+@media (min-width: 1100px) { .lookbook { grid-template-columns: repeat(4, 1fr); } }
 
-.lookbook .shot { margin: 0; }
-.lookbook .shot a {
-  display: block; overflow: hidden; background: var(--paper-3); position: relative;
-}
+.lookbook .shot { display: block; overflow: hidden; background: var(--paper-3); position: relative; }
 .lookbook .shot img {
   width: 100%; height: auto; display: block;
   aspect-ratio: 800/1100; object-fit: cover;
   transition: transform .5s ease;
 }
-.lookbook .shot a:hover img { transform: scale(1.04); }
-.lookbook .shot a::after {
+.lookbook .shot:hover img { transform: scale(1.04); }
+.lookbook .shot::after {
   content: ""; position: absolute; inset: 0;
-  background: rgba(36, 26, 20, .14); opacity: 0; transition: opacity .3s;
+  background: rgba(36, 26, 20, .16); opacity: 0; transition: opacity .3s;
 }
-.lookbook .shot a:hover::after { opacity: 1; }
-
-.lookbook figcaption {
-  margin-top: 11px; font-size: 11.5px; letter-spacing: .13em;
-  text-transform: uppercase; color: var(--ink-2); line-height: 1.45;
-}
-.lookbook.is-5 figcaption { font-size: 10.5px; letter-spacing: .1em; }
-
-.lookbook__empty {
-  grid-column: 1 / -1; text-align: center; padding: 60px 20px;
-  color: var(--ink-2); font-size: 15px;
-}
+.lookbook .shot:hover::after { opacity: 1; }

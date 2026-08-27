@@ -382,7 +382,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Scrolling threadwork over the chest and full placket.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Groom"
       ],
       "colours": [
@@ -402,7 +402,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "All-over brocade with a plain contrast churidar.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Groom"
       ],
       "colours": [
@@ -421,7 +421,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Jaal lattice ground with a zari hem border.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Reception"
       ],
       "colours": [
@@ -440,7 +440,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Tonal threadwork with an antique-gold placket.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Groom"
       ],
       "colours": [
@@ -478,7 +478,8 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Soft floral vine, ideal for a daytime ceremony.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -499,7 +500,6 @@ window.DS = {
       "detail": "Fine zari striping with a high mandarin collar.",
       "tags": [
         "Reception",
-        "Cocktail",
         "Evening"
       ],
       "colours": [
@@ -518,7 +518,8 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Scattered buti motif with a tonal hem band.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -539,7 +540,7 @@ window.DS = {
       "detail": "Cape-cut overlay pinned at the shoulder.",
       "tags": [
         "Sangeet",
-        "Cocktail"
+        "Engagement"
       ],
       "colours": [
         "cream",
@@ -559,7 +560,6 @@ window.DS = {
       "detail": "Angled hem with a tonal trim along the fall.",
       "tags": [
         "Engagement",
-        "Cocktail",
         "Evening"
       ],
       "colours": [
@@ -600,8 +600,7 @@ window.DS = {
       "detail": "Long brocade panel layered to one side.",
       "tags": [
         "Reception",
-        "Engagement",
-        "Cocktail"
+        "Engagement"
       ],
       "colours": [
         "cream",
@@ -621,7 +620,7 @@ window.DS = {
       "detail": "Chevron-worked cowl drape with a soft fall.",
       "tags": [
         "Sangeet",
-        "Cocktail"
+        "Engagement"
       ],
       "colours": [
         "beige",
@@ -641,7 +640,6 @@ window.DS = {
       "detail": "Buti-worked overlay with a sharp diagonal hem.",
       "tags": [
         "Engagement",
-        "Cocktail",
         "Evening"
       ],
       "colours": [
@@ -662,6 +660,7 @@ window.DS = {
       "detail": "Paisley overlay in a muted sage for daytime.",
       "tags": [
         "Mehendi",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -682,7 +681,8 @@ window.DS = {
       "detail": "Panelled front with a jaal-worked overlay.",
       "tags": [
         "Sangeet",
-        "Mehendi"
+        "Mehendi",
+        "Haldi"
       ],
       "colours": [
         "ivory",
@@ -723,7 +723,7 @@ window.DS = {
       "detail": "Floral kurta matched to a tonal jacket.",
       "tags": [
         "Engagement",
-        "Mehendi",
+        "Haldi",
         "Festive"
       ],
       "colours": [
@@ -743,7 +743,7 @@ window.DS = {
       "type": "Kurta Jacket Set",
       "detail": "Patch-effect jacket over a plain beige kurta.",
       "tags": [
-        "Mehendi",
+        "Haldi",
         "Daytime",
         "Set"
       ],
@@ -783,8 +783,8 @@ window.DS = {
       "type": "Kurta Jacket Set",
       "detail": "Buti-worked jacket with a fine tonal border.",
       "tags": [
-        "Ceremony",
-        "Mehendi",
+        "Wedding Ceremony",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -804,7 +804,6 @@ window.DS = {
       "detail": "Brocade jacket, plain navy kurta and churidar.",
       "tags": [
         "Engagement",
-        "Mehendi",
         "Evening",
         "Festive"
       ],
@@ -826,7 +825,6 @@ window.DS = {
       "tags": [
         "Sangeet",
         "Engagement",
-        "Mehendi",
         "Festive"
       ],
       "colours": [
@@ -868,7 +866,6 @@ window.DS = {
       "detail": "Closed collar, five-button front, matching trouser.",
       "tags": [
         "Engagement",
-        "Cocktail",
         "Formal",
         "Evening"
       ],
@@ -908,7 +905,7 @@ window.DS = {
       "type": "Jodhpuri",
       "detail": "Ceremonial brocade with a plain collar band.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Reception",
         "Engagement"
       ],
@@ -930,7 +927,6 @@ window.DS = {
       "tags": [
         "Reception",
         "Engagement",
-        "Cocktail",
         "Evening"
       ],
       "colours": [
@@ -969,7 +965,7 @@ window.DS = {
       "type": "Jodhpuri",
       "detail": "Scattered buti with a contrast collar brooch.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Daytime"
       ],
       "colours": [
@@ -988,9 +984,8 @@ window.DS = {
       "type": "Jodhpuri",
       "detail": "Fine zari striping, ceremonial finish.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Engagement",
-        "Cocktail",
         "Evening"
       ],
       "colours": [
@@ -1029,9 +1024,9 @@ window.DS = {
       "type": "Kurta Jacket Set",
       "detail": "Lattice-worked jacket over a plain ivory kurta.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Engagement",
-        "Mehendi",
+        "Haldi",
         "Festive"
       ],
       "colours": [
@@ -1050,7 +1045,7 @@ window.DS = {
       "type": "Jodhpuri",
       "detail": "A proper bandhgala with a closed collar and five buttons.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Engagement",
         "Formal"
       ],
@@ -1070,7 +1065,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Full-length sherwani with a zari placket and hem band.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Groom"
       ],
       "colours": [
@@ -1089,7 +1084,7 @@ window.DS = {
       "type": "Kurta",
       "detail": "Light printed kurta and churidar for a daytime function.",
       "tags": [
-        "Mehendi",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -1130,7 +1125,7 @@ window.DS = {
       "detail": "A small draped overlay with an angled hem.",
       "tags": [
         "Sangeet",
-        "Mehendi",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -1170,7 +1165,8 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Tonal threadwork, cut short and easy to move in.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
+        "Haldi",
         "Daytime"
       ],
       "colours": [
@@ -1276,7 +1272,7 @@ window.DS = {
       "type": "Sherwani",
       "detail": "Wedding wear cut to your own length, collar height and placket.",
       "tags": [
-        "Ceremony",
+        "Wedding Ceremony",
         "Made to Measure"
       ],
       "colours": [

@@ -1106,42 +1106,46 @@ def make_favicon():
 
 
 # ------------------------------------------------------------ occasions ---
-# The six occasions the look book filters by. Item tags are written in the
-# shop's own words; this maps them onto that fixed vocabulary, so no chip can
-# lead to an empty grid and no piece falls outside every occasion.
+# The six functions the collection filters by. Item tags are written in the
+# shop's own words; this maps them onto that fixed vocabulary so no chip can
+# lead to an empty grid.
 
-OCCASIONS = ['Ceremony', 'Reception', 'Sangeet', 'Engagement', 'Mehendi', 'Cocktail']
+OCCASIONS = ['Wedding Ceremony', 'Reception', 'Sangeet', 'Engagement',
+             'Mehendi', 'Haldi']
 
 # tags that name an occasion, and so are replaced by the list above
 OCCASION_SOURCE = {'Wedding', 'Reception', 'Sangeet', 'Mehendi', 'Haldi', 'Cocktail'}
 
 DRESSY = ('jodhpuri', 'indowestern', 'suit', 'kurta_jacket')
-DAYTIME_ETHNIC = ('kurta', 'kurta_jacket', 'indowestern')
+DAYTIME_ETHNIC = ('kurta', 'kurta_jacket', 'indowestern', 'sherwani')
+
+# haldi and mehendi take the same kinds of clothes; what separates them on the
+# day is the palette, so that is what separates them here
+HALDI_COLOURS = {'mustard', 'gold', 'ivory', 'cream', 'peach', 'beige', 'copper', 'rust'}
+MEHENDI_COLOURS = {'sage', 'olive', 'emerald', 'bottle', 'teal', 'lavender', 'lilac',
+                   'rose', 'pink', 'powder'}
 
 
 def occasions_for(it):
-    t, g, out = set(it['tags']), it['garment'], []
+    t, g, c, out = set(it['tags']), it['garment'], it['color'], []
+    daytime = bool(t & {'Daytime', 'Festive', 'Mehendi', 'Haldi'})
 
     def add(name):
         if name not in out:
             out.append(name)
 
     if 'Wedding' in t:
-        add('Ceremony')
+        add('Wedding Ceremony')
     if 'Reception' in t:
         add('Reception')
     if 'Sangeet' in t:
         add('Sangeet')
-    if g in DRESSY and t & {'Reception', 'Evening', 'Formal', 'Festive'}:
+    if g in DRESSY and t & {'Reception', 'Evening', 'Formal', 'Festive', 'Cocktail'}:
         add('Engagement')
-    if t & {'Mehendi', 'Haldi'}:
+    if 'Mehendi' in t or (daytime and g in DAYTIME_ETHNIC and c in MEHENDI_COLOURS):
         add('Mehendi')
-    if t & {'Daytime', 'Festive'} and g in DAYTIME_ETHNIC:
-        add('Mehendi')
-    if 'Cocktail' in t:
-        add('Cocktail')
-    if 'Evening' in t and g in ('indowestern', 'jodhpuri', 'suit', 'sherwani'):
-        add('Cocktail')
+    if 'Haldi' in t or (daytime and g in DAYTIME_ETHNIC and c in HALDI_COLOURS):
+        add('Haldi')
 
     # keep whatever is not an occasion: Cloth, Stitched, Two-Piece, Office ...
     return out + [x for x in it['tags'] if x not in OCCASION_SOURCE]

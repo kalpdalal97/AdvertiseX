@@ -43,9 +43,9 @@
     { key: 'about', label: 'About Us', href: 'about.html' }
   ];
 
-  // the six occasions the look book filters by, in the order they read
-  var OCCASIONS = ['Ceremony', 'Reception', 'Sangeet', 'Engagement',
-    'Mehendi', 'Cocktail'];
+  // the six functions the collection filters by, in the order they read
+  var OCCASIONS = ['Wedding Ceremony', 'Reception', 'Sangeet', 'Engagement',
+    'Mehendi', 'Haldi'];
 
   var SORTS = [
     ['picked', 'Hand-picked'],
@@ -522,71 +522,23 @@
       if (!bySection[i.section]) { bySection[i.section] = []; order.push(i.section); }
       bySection[i.section].push(i);
     });
-    var all = [], left = true;
+    var shots = [], left = true;
     for (var pass = 0; left; pass++) {
       left = false;
       for (var k = 0; k < order.length; k++) {
         var q = bySection[order[k]];
-        if (pass < q.length) { all.push(q[pass]); left = true; }
+        if (pass < q.length) { shots.push(q[pass]); left = true; }
       }
     }
 
-    var chipEl = document.querySelector('[data-book-chips]');
-    var countEl = document.querySelector('[data-book-count]');
-    var clearEl = document.querySelector('[data-book-clear]');
-    var picked = [], cols = 3, shown = all;
-
-    var offered = OCCASIONS.filter(function (t) {
-      return all.some(function (i) { return i.tags.indexOf(t) > -1; });
+    grid.innerHTML = shots.map(function (i) {
+      return '<a class="shot" href="#" data-open="' + i.id + '">' +
+        '<img src="' + artSrc(i) + '" alt="' + esc(i.title) + '" loading="lazy"></a>';
+    }).join('');
+    grid.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-open]');
+      if (a) { e.preventDefault(); openLb(shots, a.getAttribute('data-open')); }
     });
-
-    function visible() {
-      if (!picked.length) return all;
-      return all.filter(function (i) {
-        return picked.some(function (t) { return i.tags.indexOf(t) > -1; });
-      });
-    }
-
-    function paint() {
-      shown = visible();
-      if (chipEl) {
-        chipEl.innerHTML = offered.map(function (t) {
-          return '<button class="chip' + (picked.indexOf(t) > -1 ? ' is-on' : '') +
-            '" data-book-tag="' + esc(t) + '">' + esc(t) + '</button>';
-        }).join('');
-      }
-      if (clearEl) clearEl.hidden = picked.length === 0;
-      if (countEl) countEl.textContent = shown.length + (shown.length === 1 ? ' piece' : ' pieces');
-      grid.className = 'lookbook is-' + cols;
-      grid.innerHTML = shown.length
-        ? shown.map(function (i) {
-            return '<figure class="shot">' +
-              '<a href="#" data-open="' + i.id + '">' +
-              '<img src="' + artSrc(i) + '" alt="' + esc(i.title) + '" loading="lazy">' +
-              '</a><figcaption>' + esc(i.title) + '</figcaption></figure>';
-          }).join('')
-        : '<p class="lookbook__empty">Nothing for that occasion yet — try another.</p>';
-      [].forEach.call(document.querySelectorAll('[data-book-view]'), function (b) {
-        b.classList.toggle('is-on', +b.getAttribute('data-book-view') === cols);
-      });
-    }
-
-    document.addEventListener('click', function (e) {
-      var chip = e.target.closest('[data-book-tag]');
-      if (chip) {
-        var t = chip.getAttribute('data-book-tag'), at = picked.indexOf(t);
-        if (at > -1) picked.splice(at, 1); else picked.push(t);
-        paint();
-        return;
-      }
-      if (e.target.closest('[data-book-clear]')) { picked = []; paint(); return; }
-      var v = e.target.closest('[data-book-view]');
-      if (v) { cols = +v.getAttribute('data-book-view'); paint(); return; }
-      var open = e.target.closest('[data-lookbook] [data-open]');
-      if (open) { e.preventDefault(); openLb(shown, open.getAttribute('data-open')); }
-    });
-
-    paint();
   }
 
   /* ------------------------------------------------------ collection page -- */
@@ -599,7 +551,7 @@
     var state = {
       c: qs.get('c') || 'all',
       type: qs.get('type') || '',
-      tag: qs.get('tag') || '',
+      tags: (qs.get('tag') || '').split(',').filter(Boolean),
       sort: 'picked',
       view: 2
     };
@@ -621,7 +573,11 @@
     function visible() {
       var list = pool();
       if (state.type) list = list.filter(function (i) { return i.type === state.type; });
-      if (state.tag) list = list.filter(function (i) { return i.tags.indexOf(state.tag) > -1; });
+      if (state.tags.length) {
+        list = list.filter(function (i) {
+          return state.tags.some(function (t) { return i.tags.indexOf(t) > -1; });
+        });
+      }
       if (state.sort === 'az') list.sort(function (a, b) { return a.title.localeCompare(b.title); });
       if (state.sort === 'za') list.sort(function (a, b) { return b.title.localeCompare(a.title); });
       if (state.sort === 'fabric') list.sort(function (a, b) { return a.fabric.localeCompare(b.fabric); });
@@ -647,16 +603,24 @@
         '<p>' + esc(blurb) + '</p>';
     }
 
-    function paintChips() {
-      var tags = [];
-      pool().forEach(function (i) {
-        i.tags.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); });
+    function offeredTags() {
+      var here = pool();
+      return OCCASIONS.filter(function (t) {
+        return here.some(function (i) { return i.tags.indexOf(t) > -1; });
       });
-      tags.sort();
-      chipEl.innerHTML = '<button class="chip' + (state.tag ? '' : ' is-on') + '" data-tag="">All occasions</button>' +
-        tags.map(function (t) {
-          return '<button class="chip' + (state.tag === t ? ' is-on' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
-        }).join('');
+    }
+
+    function paintChips() {
+      var tags = offeredTags();
+      if (!tags.length) { chipEl.parentNode.hidden = true; return; }
+      chipEl.parentNode.hidden = false;
+      chipEl.innerHTML = tags.map(function (t) {
+        return '<button class="chip' + (state.tags.indexOf(t) > -1 ? ' is-on' : '') +
+          '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+      }).join('') +
+        (state.tags.length
+          ? '<button class="chip chip--clear" data-tag-clear>Clear all</button>'
+          : '');
     }
 
     function paintGrid() {
@@ -680,7 +644,7 @@
       var lab = root.querySelector('[data-sort-label]');
       if (lab) lab.textContent = s ? s[1] : 'Hand-picked';
       var fl = root.querySelector('[data-filter-label]');
-      var n = (state.tag ? 1 : 0) + (state.type ? 1 : 0);
+      var n = state.tags.length + (state.type ? 1 : 0);
       if (fl) fl.textContent = n ? n + ' applied' : 'Apply filter';
       var dot = root.querySelector('[data-filter-dot]');
       if (dot) dot.hidden = n === 0;
@@ -693,7 +657,7 @@
       var p = new URLSearchParams();
       p.set('c', state.c);
       if (state.type) p.set('type', state.type);
-      if (state.tag) p.set('tag', state.tag);
+      if (state.tags.length) p.set('tag', state.tags.join(','));
       writeQuery(p);
     }
 
@@ -705,15 +669,23 @@
       var q = params || readQuery();
       state.c = q.get('c') || 'all';
       state.type = q.get('type') || '';
-      state.tag = q.get('tag') || '';
+      state.tags = (q.get('tag') || '').split(',').filter(Boolean);
       render();
     };
 
     render();
 
     root.addEventListener('click', function (e) {
+      if (e.target.closest('[data-tag-clear]')) { e.preventDefault(); state.tags = []; render(); return; }
       var chip = e.target.closest('[data-tag]');
-      if (chip) { e.preventDefault(); state.tag = chip.getAttribute('data-tag'); render(); return; }
+      if (chip) {
+        e.preventDefault();
+        var t = chip.getAttribute('data-tag');
+        var at = state.tags.indexOf(t);
+        if (at > -1) state.tags.splice(at, 1); else state.tags.push(t);
+        render();
+        return;
+      }
       var v = e.target.closest('[data-view]');
       if (v) { state.view = +v.getAttribute('data-view'); paintGrid(); paintBar(); return; }
       var open = e.target.closest('[data-open]');
@@ -747,7 +719,7 @@
         pool().forEach(function (i) { i.tags.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); }); });
         var types = [];
         pool().forEach(function (i) { if (i.type && types.indexOf(i.type) < 0) types.push(i.type); });
-        tags.sort(); types.sort();
+        types.sort();
         body.innerHTML =
           (types.length > 1
             ? '<h5>Garment</h5><div class="sheet__opts">' +
@@ -757,10 +729,10 @@
                     '" data-type="' + esc(t) + '">' + esc(t) + '</button>';
                 }).join('') + '</div>'
             : '') +
-          '<h5>Occasion &amp; use</h5><div class="sheet__opts">' +
-            '<button class="chip' + (state.tag ? '' : ' is-on') + '" data-tag="">All</button>' +
+          '<h5>Occasion</h5><div class="sheet__opts">' +
             tags.map(function (t) {
-              return '<button class="chip' + (state.tag === t ? ' is-on' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+              return '<button class="chip' + (state.tags.indexOf(t) > -1 ? ' is-on' : '') +
+                '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
             }).join('') + '</div>';
       }
       sheet.classList.add('is-on'); sheetScrim.classList.add('is-on');
@@ -775,14 +747,21 @@
     sheet.addEventListener('click', function (e) {
       if (e.target.closest('[data-sheet-close]')) { closeSheet(); return; }
       if (e.target.closest('[data-sheet-clear]')) {
-        state.tag = ''; state.type = ''; render(); closeSheet(); return;
+        state.tags = []; state.type = ''; render(); closeSheet(); return;
       }
       var s = e.target.closest('[data-sort]');
       if (s) { state.sort = s.getAttribute('data-sort'); render(); closeSheet(); return; }
       var ty = e.target.closest('[data-type]');
       if (ty) { state.type = ty.getAttribute('data-type'); render(); openSheet('filter'); return; }
-      var t = e.target.closest('[data-tag]');
-      if (t) { state.tag = t.getAttribute('data-tag'); render(); openSheet('filter'); return; }
+      var tc = e.target.closest('[data-tag]');
+      if (tc) {
+        var t = tc.getAttribute('data-tag');
+        var at = state.tags.indexOf(t);
+        if (at > -1) state.tags.splice(at, 1); else state.tags.push(t);
+        render();
+        openSheet('filter');
+        return;
+      }
     });
     sheetScrim.addEventListener('click', closeSheet);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });

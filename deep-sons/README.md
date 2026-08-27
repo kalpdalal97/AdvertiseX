@@ -110,7 +110,8 @@ Pages, or ordinary shared hosting).
 * Section landing pages for men's and kids' wear
 * Mega dropdowns on Men and Kids: the men's sections, and — since kids is a
   single section — the garment families inside it, each with a thumbnail
-* Filter by occasion and by garment type; sort by name or fabric
+* Filter by occasion (Wedding Ceremony, Reception, Sangeet, Engagement,
+  Mehendi, Haldi — multi-select) and by garment type; sort by name or fabric
 * One-up / two-up grid toggle and a sticky sort–filter bar
 * Full-screen photo viewer with keyboard arrows and swipe
 * "Save" hearts that build a shortlist in the visitor's own browser
@@ -122,7 +123,7 @@ Pages, or ordinary shared hosting).
 ```
 index.html            home
 men.html              the men's sections
-lookbook.html         the picture book: occasion chips + names, no prices
+lookbook.html         the picture book: pictures only, no captions
 collection.html       every section, driven by ?c=<section>
 about.html            who we are, address, hours, what to expect
 assets/css/style.css  the whole stylesheet
